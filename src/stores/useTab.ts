@@ -8,5 +8,5 @@ type TabState = {
 
 export const useTab = create<TabState>(set => ({
   tabIndex: 0,
-  setTabIndex: (tabIndex) => set(_ => ({ tabIndex }))
+  setTabIndex: (tabIndex) => set(() => ({ tabIndex }))
 }));

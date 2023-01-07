@@ -1,3 +1,5 @@
+import * as path from "path";
+
 const config = {
   projectName: "wallet-keeper",
   date: "2023-1-6",
@@ -63,6 +65,13 @@ const config = {
         }
       }
     }
+  },
+  alias: {
+    "@/components": path.resolve(__dirname, "..", "src/components"),
+    "@/hooks": path.resolve(__dirname, "..", "src/hooks"),
+    "@/pages": path.resolve(__dirname, "..", "src/pages"),
+    "@/stores": path.resolve(__dirname, "..", "src/stores"),
+    "@/services": path.resolve(__dirname, "..", "src/services"),
   }
 };
 
