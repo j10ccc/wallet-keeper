@@ -4,6 +4,8 @@ import { AtAvatar, AtButton, AtCard } from "taro-ui";
 import { RegisterAPI } from "@/services/public/RegisterAPI";
 import useRequest from "@/hooks/useRequest";
 
+import styles from "./index.module.scss";
+
 const Nameplace = () => {
   const initialData = {
     username: "manual",
@@ -15,6 +17,9 @@ const Nameplace = () => {
     userInfo,
     setIsLogin,
     setToken,
+    setBirthday,
+    setUsername,
+    setGender
   } = useUser();
 
   const { run } = useRequest(
@@ -25,9 +30,9 @@ const Nameplace = () => {
         if (response.cookies && response.cookies?.length !== 0) {
           setIsLogin(true);
           setToken(response.cookies[0]);
-          // setGender(initialData.gender);
-          // setUsername(initialData.username);
-          // setBirthday(initialData.gender);
+          setGender(initialData.gender);
+          setUsername(initialData.username);
+          setBirthday(initialData.gender);
         }
       })
     });
@@ -40,11 +45,19 @@ const Nameplace = () => {
     <AtCard title="个人信息">
       {userInfo.isLogin ?
         <View>
-          <AtAvatar />
-          <Text>{ userInfo.username } { userInfo.gender }</Text>
-          <View>
-            <Text>生日</Text>
-            <Text>{ userInfo.birthday }</Text>
+          <View className={styles.primary}>
+            <AtAvatar />
+            <Text className={styles.username}>{ userInfo.username }</Text>
+          </View>
+          <View className={styles.secondary}>
+            <View className={styles.desc}>
+              <Text className={styles.title}>性别</Text>
+              <Text className={styles.content}>{ userInfo.gender}</Text>
+            </View>
+            <View className={styles.desc}>
+              <Text className={styles.title}>生日</Text>
+              <Text className={styles.content}>{ userInfo.birthday }</Text>
+            </View>
           </View>
         </View> :
         <View>

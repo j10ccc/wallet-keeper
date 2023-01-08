@@ -1,0 +1,35 @@
+@import "@/styles/variables";
+
+.primary {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .username {
+    font-weight: 600;
+    font-size: 20Px;
+  }
+}
+
+.secondary {
+  display: flex;
+
+}
+
+.desc {
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    color: $color-gray-1;
+  }
+
+  .content {
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+
+}
