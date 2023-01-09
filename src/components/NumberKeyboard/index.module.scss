@@ -1,0 +1,50 @@
+@import "@/styles/variables";
+
+$harf-gap: 5Px;
+
+.container {
+  height: 240Px;
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+  grid-template-rows: repeat(4, 25%);
+  padding: $harf-gap;
+  border-top: 1Px solid $color-gray-4;
+
+  .key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: $harf-gap;
+    border-radius: 8Px;
+    background-color: $color-gray-4;
+
+    .text {
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+  }
+
+  .key-delete {
+    .text {
+      color: red;
+    }
+  }
+
+  .key-reset {
+    .text {
+      color: $color-brand;
+    }
+  }
+
+  .key-save {
+    background-color: $color-brand;
+
+    .text {
+      color: $color-white-1;
+    }
+  }
+
+  .key:active {
+    filter: brightness(90%);
+  }
+}

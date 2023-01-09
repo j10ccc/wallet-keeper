@@ -1,0 +1,47 @@
+@import "@/styles/variables.scss";
+
+$half-gap-horizon: 3Px;
+$half-gap-vertical: 12Px;
+
+.tab-scroll-view {
+  height: calc(100vh - 60Px - env(safe-area-inset-bottom) - 44Px - 250Px);
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  padding: $half-gap-horizon;
+
+  .item:active {
+    background-color: $color-gray-3;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: $half-gap-vertical $half-gap-horizon;
+    transition: all 0.1s;
+    border-radius: 8Px;
+
+    .icon-wrapper {
+      border-radius: 50%;
+      background-color: $color-gray-4;
+      padding: 8Px;
+      text-align: center;
+      width: 27Px;
+      height: 27Px;
+
+      .icon {
+        font-size: 24Px !important;
+        color: $color-gray-1
+      }
+    }
+
+    .label {
+      margin-top: 2Px;
+      font-size: 0.8em;
+    }
+  }
+}

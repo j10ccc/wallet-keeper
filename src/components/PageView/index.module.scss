@@ -1,0 +1,5 @@
+.page-view {
+  height: calc(100vh - 60Px - env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+}
