@@ -23,6 +23,7 @@ const TabBar = () => {
 
   return (
     <AtTabBar
+      fontSize={12}
       tabList={tabList}
       current={tabIndex}
       onClick={handleChangeTab}
