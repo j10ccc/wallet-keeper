@@ -1,0 +1,99 @@
+@font-face {
+  font-family: "iconfont";
+  /* Project id 3856634 */
+  src: url('../assets/fonts/iconfont.woff2?t=1673249391367') format('woff2'),
+    url('../assets/fonts/iconfont.woff?t=1673249391367') format('woff'),
+    url('../assets/fonts/iconfont.ttf?t=1673249391367') format('truetype');
+}
+
+.icon {
+  font-family: "iconfont" !important;
+  font-size: 16Px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-alimony:before {
+  content: "\e628";
+}
+
+.icon-redenvelope:before {
+  content: "\e6da";
+}
+
+.icon-daily:before {
+  content: "\e600";
+}
+
+.icon-transit:before {
+  content: "\e601";
+}
+
+.icon-meals:before {
+  content: "\e6d0";
+}
+
+.icon-food:before {
+  content: "\e84f";
+}
+
+.icon-stock:before {
+  content: "\e617";
+}
+
+.icon-other:before {
+  content: "\e629";
+}
+
+.icon-clothes:before {
+  content: "\e610";
+}
+
+.icon-sports:before {
+  content: "\e61c";
+}
+
+.icon-calls:before {
+  content: "\e96c";
+}
+
+.icon-salary:before {
+  content: "\e7e9";
+}
+
+.icon-trip:before {
+  content: "\e7ea";
+}
+
+.icon-pets:before {
+  content: "\e7ec";
+}
+
+.icon-school:before {
+  content: "\e7f1";
+}
+
+.icon-treatment:before {
+  content: "\e7f2";
+}
+
+.icon-fun:before {
+  content: "\e7f3";
+}
+
+.icon-house:before {
+  content: "\e7f4";
+}
+
+.icon-digit:before {
+  content: "\e608";
+}
+
+.icon-oil:before {
+  content: "\e603";
+}
+
+.icon-makeup:before {
+  content: "\e607";
+}
