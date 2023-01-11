@@ -1,11 +1,19 @@
-import { View } from "@tarojs/components";
+import { PageContainer, View } from "@tarojs/components";
 import "./index.scss";
+import IndexHeader from "./IndexHeader";
+import { useState } from "react";
+import PageView from "@/components/PageView";
 
 const IndexPage = () => {
+  const [currentDate, setCurrentDate] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1
+  });
 
   return (
-    <View className="index">
-    </View>
+    <PageView>
+      <IndexHeader date={currentDate} setDate={setCurrentDate}/>
+    </PageView>
   );
 };
 

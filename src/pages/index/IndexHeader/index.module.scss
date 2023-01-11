@@ -1,0 +1,51 @@
+@import "@/styles/variables";
+
+.container {
+  padding: 16rpx;
+  background-color: $color-brand;
+  display: flex;
+  flex-direction: column;
+
+  :global(text) {
+    color: $color-white-1;
+  }
+
+  .selectors {
+    display: flex;
+    gap: 16rpx;
+    justify-content: space-between;
+
+    .selector {
+      padding: 12rpx;
+      transition: all .2s;
+      border-radius: 12rpx;
+    }
+
+    .type-selector {
+      background-color: rgb(255, 255, 255, 0.1);
+      padding-left: 24rpx;
+      padding-right: 24rpx;
+    }
+
+    .type-selector:active {
+      filter: brightness(90%);
+    }
+
+    .date-selector {
+      font-size: 1.2em;
+    }
+
+    .date-selector:active {
+      background-color: rgb(255, 255, 255, 0.1);
+    }
+  }
+
+  .detail {
+    display: flex;
+    gap: 16rpx;
+    align-items: baseline;
+    padding: 0 24rpx;
+    margin-top: 16rpx;
+  }
+
+}
