@@ -26,7 +26,6 @@ const Nameplace = () => {
     RegisterAPI, {
       manual: true,
       onSuccess: ((response) => {
-        console.log(response);
         if (response.cookies && response.cookies?.length !== 0) {
           setIsLogin(true);
           setToken(response.cookies[0]);

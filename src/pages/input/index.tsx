@@ -1,66 +1,58 @@
 import { View } from "@tarojs/components";
 import NumberKeyboard from "@/components/NumberKeyboard";
-import { useCallback, useState } from "react";
-import { useEffect } from "react";
+import { useState } from "react";
 import Taro from "@tarojs/taro";
 import PageView from "@/components/PageView";
 import { AtTabs, AtTabsPane } from "taro-ui";
 import RecordTypeList from "./RecordTypeList";
+import ContentPreview from "./ContentPreview";
+import ExtentsionsListBar from "./ExtensionListBar";
+import { expenseItemList, incomeItemList } from "../constants/RecordItemList";
+import { useInputDraft } from "@/stores/useInputDraft";
+import { useBillRecords } from "@/stores/useBillRecords";
+import { useGuid } from "@/hooks/useGuid";
 
 const tabList = [
-  { title: "支出" },
-  { title: "收入" },
+  { title: "支出", value: "expense" },
+  { title: "收入", value: "income"},
 ];
 
-export type RecordTypeItem = {
-  label: string;
-  value: string; // consist with iconName
-}
+const evalExpOfTwo = (content: string): number => {
+  let res = 0;
+  let index = -1;
+  content.split("").forEach((item, i) => {
+    if (item === "+" || item === "-")
+      index = i;
+  });
 
-const consumeItemList: RecordTypeItem[] = [
-  {label: "三餐", value: "meals"},
-  {label: "日用品", value: "daily"},
-  {label: "交通", value: "transit"},
-  {label: "零食", value: "food"},
-  {label: "衣服", value: "clothes"},
-  {label: "发红包", value: "redenvelope"},
-  {label: "运动", value: "sports"},
-  {label: "话费网费", value: "calls"},
-  {label: "旅游", value: "trip"},
-  {label: "宠物", value: "pets"},
-  {label: "学习", value: "school"},
-  {label: "医疗", value: "treatment"},
-  {label: "娱乐", value: "fun"},
-  {label: "住房", value: "house"},
-  {label: "电器数码", value: "digit"},
-  {label: "汽车/加油", value: "oil"},
-  {label: "美妆", value: "makeup"},
-  {label: "其他", value: "other"},
-];
-
-const incomeItemList: RecordTypeItem[] = [
-  {label: "工资", value: "salary"},
-  {label: "生活费", value: "alimony"},
-  {label: "收红包", value: "redenvelope"},
-  {label: "股票基金", value: "stock"},
-  {label: "其他", value: "other"},
-];
+  if (index === -1) return parseFloat(content);
+  else {
+    const a = parseFloat(content.slice(0, index + 1)) || 0;
+    const b = parseFloat(content.slice(index + 1)) || 0;
+    if (content[index] === "+") res = a + b;
+    else res = a - b;
+  }
+  return res;
+};
 
 const InputPage = () => {
-  const [content, setContent] = useState("0");
+  const [content, setContent] = useState("0.00");
   const [tabIndex, setTabIndex] = useState(0);
+  const { addItem } = useBillRecords();
 
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
+  const {
+    date,
+    kind,
+    type,
+    setKind,
+    setValue,
+    setType,
+    resetDraft,
+  } = useInputDraft();
 
-  const onConfirm = useCallback(() => {
-    setContent("0");
-  }, [content]);
-
-  const onInput = useCallback((key: string) => {
+  // TODO: 数字过长
+  const onInput = (key: string) => {
     const currentNum = content.split(/[+]|-/).pop() || "0";
-    console.log("currentNum" ,currentNum);
     if (key === ".") {
       // .
       if (currentNum.includes(".")) return;
@@ -68,32 +60,61 @@ const InputPage = () => {
       else setContent(content => content + key);
     } else if (key === "+" || key === "-") {
       // + -
+      if (content === "0" || content === "0.00") return;
       if (content.endsWith("+"))
         setContent(content => content.slice(0, content.length - 1) + "-");
       else if (content.endsWith("-"))
         setContent(content => content.slice(0, content.length - 1) + "+");
-      else setContent(content => content + key);
+      else {
+        const res = evalExpOfTwo(content);
+        setValue(res);
+        setContent(()=> res.toString()+ key);
+      }
     } else {
       // 1 2 3
-      if (content === "0") setContent(key);
+      if (content === "0" || content === "0.00") setContent(key);
       else if (currentNum.includes(".") && currentNum.split(".")[1].length == 2)
         Taro.showToast({title: "最多2位小数", icon:"none"});
+      else if (!currentNum.includes(".") && currentNum.split(".")[0].length === 8)
+        Taro.showToast({title: "最多8位整数", icon:"none"});
       else setContent(content => content + key);
     }
 
-  }, [content]);
+  };
 
-  const onDelete = useCallback(() => {
+  const onConfirm = () => {
+    const res = evalExpOfTwo(content);
+    setValue(res);
+    setContent("0");
+    // console.log(value, kind, type, date);
+    addItem({
+      uid: useGuid().guid,
+      value: res,
+      kind,
+      type,
+      date
+    });
+    resetDraft();
+  };
+
+  const onDelete = () => {
     if (content.length === 1) setContent("0");
     else setContent(value => value.slice(0, value.length - 1));
-  }, [content]);
+  };
 
-  const onReset = useCallback(() => {
+  const onReset = () => {
     setContent("0");
-  }, []);
+    // TODO: submit but not close
+    resetDraft();
+  };
 
   const handleChangeTab = (index: number) => {
     setTabIndex(index);
+    setKind(tabList[index].value);
+    if (tabList[index].value === "expense")
+      setType(expenseItemList[0].value);
+    else
+      setType(incomeItemList[0].value);
   };
 
   return <PageView>
@@ -105,13 +126,15 @@ const InputPage = () => {
         scroll
       >
         <AtTabsPane index={0} current={tabIndex}>
-          <RecordTypeList list={consumeItemList}/>
+          <RecordTypeList list={expenseItemList}/>
         </AtTabsPane>
         <AtTabsPane index={1} current={tabIndex}>
           <RecordTypeList list={incomeItemList}/>
         </AtTabsPane>
       </AtTabs>
     </View>
+    <ContentPreview content={content} />
+    <ExtentsionsListBar />
     <NumberKeyboard
       onConfirm={onConfirm}
       onDelete={onDelete}

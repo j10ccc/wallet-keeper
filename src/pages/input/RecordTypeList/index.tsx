@@ -1,14 +1,26 @@
 import { View, Text, ScrollView } from "@tarojs/components";
-import { RecordTypeItem } from "..";
+import { RecordTypeItem } from "@/pages/constants/RecordItemList";
+import { AtIcon } from "taro-ui";
+import { useInputDraft } from "@/stores/useInputDraft";
+import classnames from "classnames";
 
 import styles from "./index.module.scss";
-import { AtIcon } from "taro-ui";
 
 const TypeItem = (props: RecordTypeItem) => {
   const { value, label } = props;
+  const { type, setType } = useInputDraft();
+
+  const handleSelect = () => {
+    console.log(value);
+    setType(value);
+  };
+
   return (
-    <View className={styles.item} onClick={() => console.log(value)}>
-      <View className={styles["icon-wrapper"]}>
+    <View className={styles.item} onClick={handleSelect}>
+      <View className={classnames(
+        styles["icon-wrapper"],
+        { [styles["icon-wrapper-selected"]]: type === value}
+      )}>
         <AtIcon className={styles.icon} prefixClass="icon" value={value} />
       </View>
       <Text className={styles.label}>{label}</Text>
@@ -17,7 +29,7 @@ const TypeItem = (props: RecordTypeItem) => {
 };
 
 type ListPropsType = {
-  list: RecordTypeItem[];
+  list: RecordTypeItem[]
 }
 
 const RecordTypeList = (props: ListPropsType) => {

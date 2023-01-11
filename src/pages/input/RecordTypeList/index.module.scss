@@ -4,7 +4,7 @@ $half-gap-horizon: 3Px;
 $half-gap-vertical: 12Px;
 
 .tab-scroll-view {
-  height: calc(100vh - 60Px - env(safe-area-inset-bottom) - 44Px - 250Px);
+  height: calc(100vh - 60Px - env(safe-area-inset-bottom) - 44Px - 240Px - 38Px - 38Px);
 }
 
 .container {
@@ -32,10 +32,19 @@ $half-gap-vertical: 12Px;
       text-align: center;
       width: 27Px;
       height: 27Px;
+      transition: all .1s;
 
       .icon {
         font-size: 24Px !important;
-        color: $color-gray-1
+        color: $color-gray-1;
+      }
+    }
+
+    .icon-wrapper-selected {
+      background-color: $color-brand;
+
+      .icon {
+        color: $color-white-1;
       }
     }
 

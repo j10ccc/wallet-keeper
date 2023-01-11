@@ -5,7 +5,6 @@ const IndexPage = () => {
 
   return (
     <View className="index">
-
     </View>
   );
 };
