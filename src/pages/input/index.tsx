@@ -32,7 +32,7 @@ const evalExpOfTwo = (content: string): number => {
     if (content[index] === "+") res = a + b;
     else res = a - b;
   }
-  return res;
+  return Math.floor(res * 100 + 0.5) / 100;
 };
 
 const InputPage = () => {

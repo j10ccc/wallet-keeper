@@ -11,7 +11,6 @@ const TypeItem = (props: RecordTypeItem) => {
   const { type, setType } = useInputDraft();
 
   const handleSelect = () => {
-    console.log(value);
     setType(value);
   };
 

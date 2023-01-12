@@ -31,3 +31,8 @@ export const incomeItemList: RecordTypeItem[] = [
   {label: "股票基金", value: "stock"},
   {label: "其他", value: "other"},
 ];
+
+export const itemValueLabelMap = Object.fromEntries([
+  ...expenseItemList,
+  ...incomeItemList,
+].map(item => [item.value, item.label]));

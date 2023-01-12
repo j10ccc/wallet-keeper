@@ -1,0 +1,7 @@
+@import "@/styles/variables";
+
+.scroll-view {
+  background-color: $color-gray-4;
+  flex: 1;
+  overflow: hidden;
+}

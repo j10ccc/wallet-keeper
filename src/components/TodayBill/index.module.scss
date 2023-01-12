@@ -1,0 +1,104 @@
+@import "@/styles/variables";
+
+.container {
+  padding: 0 24rpx;
+  padding-top: 16rpx;
+}
+
+.header {
+  background-color: $color-white-1;
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  .income {
+    color: $color-orange;
+  }
+
+  .expense {
+    color: $color-brand;
+  }
+
+  .date {
+    font-size: 1em;
+    color: $color-black-4;
+  }
+
+  .statistic {
+    font-size: .9em;
+    font-weight: 600;
+    display: flex;
+    gap: 16rpx;
+
+    :global(text) {
+      padding: 0 8rpx;
+      background-color: $color-gray-4;
+      border-radius: 8rpx;
+    }
+  }
+}
+
+.body {
+  background-color: $color-white-0;
+  border-bottom-left-radius: 16rpx;
+  border-bottom-right-radius: 16rpx;
+
+
+  .list-item {
+    display: flex;
+    align-items: center;
+    padding: 24rpx 32rpx;
+    gap: 16rpx;
+
+    .icon-col {
+      flex: none;
+
+      .income {
+        color: $color-orange;
+      }
+
+      .expense {
+        color: $color-brand;
+      }
+    }
+
+    .detail-col {
+      flex: auto;
+      display: flex;
+      flex-direction: column;
+      width: 0;
+
+      .type {
+        font-size: 1em;
+      }
+
+      .desc {
+        font-size: .8em;
+        color: $color-gray-2;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .value-col {
+      font-size: 1.2em;
+      flex: none;
+
+      .income {
+        color: $color-orange;
+      }
+
+      .expense {
+        color: $color-black-3
+      }
+    }
+  }
+}
+
+.container:last-child {
+  padding-bottom: 16rpx;
+}

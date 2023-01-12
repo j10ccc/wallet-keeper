@@ -70,19 +70,27 @@ const StatisticText = () => {
   const [expenseTotal, setExpenseTotal] = useState(0);
 
   const calcTotal = () => {
-    setIncomeTotal(list
+    let income = 0;
+    let expense = 0;
+
+    income = list
       .filter(item =>
         item.date.startsWith(`${date.year}-${date.month}-`) &&
         item.kind === "income")
       .map(item => item.value)
-      .reduce((prev, curr) => prev + curr, 0));
+      .reduce((prev, curr) => prev + curr, 0);
 
-    setExpenseTotal(list
+    expense = list
       .filter(item =>
         item.date.startsWith(`${date.year}-${date.month}-`) &&
         item.kind === "expense")
       .map(item => item.value)
-      .reduce((prev, curr) => prev + curr, 0));
+      .reduce((prev, curr) => prev + curr, 0);
+
+    income = Math.floor(income * 100 + 0.5) / 100;
+    expense = Math.floor(expense * 100 + 0.5) / 100;
+    setIncomeTotal(income);
+    setExpenseTotal(expense);
   };
 
   useEffect(() => {
