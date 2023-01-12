@@ -1,5 +1,5 @@
 import { View } from "@tarojs/components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DateSelectorModal from "@/components/DateSelectorModal";
 import useDay from "@/hooks/useDay";
 import { useInputDraft } from "@/stores/useInputDraft";
@@ -9,20 +9,23 @@ import styles from "./index.module.scss";
 const DateExtension = () => {
   const [date, setDate] = useState("今天");
   const [showDateSelector, setShowDateSelector] = useState(false);
-  const { setDate: setDateDraft } = useInputDraft();
+  const { date: dateDraft, setDate: setDateDraft } = useInputDraft();
 
-  const onSubmit = (date: string) => {
+  useEffect(() => {
     setDate(() => {
       const {
         isToday,
         isYesterday,
         isTheDayBeforeYesterday
-      } = useDay(date);
+      } = useDay(dateDraft);
       if (isToday) return "今天";
       else if (isYesterday) return "昨天";
       else if (isTheDayBeforeYesterday) return "前天";
-      else return date;
+      else return dateDraft;
     });
+  }, [dateDraft]);
+
+  const onSubmit = (date: string) => {
     setDateDraft(date);
     setShowDateSelector(false);
   };

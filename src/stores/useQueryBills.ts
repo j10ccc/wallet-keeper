@@ -4,7 +4,7 @@ type QueryBillsState = {
   date: { year: number, month: number};
   type: "default" | "income" | "expense";
   setDate: (year: number, month: number) => void;
-  setType: (type: "default" | "income" | "expense") => void;
+  setType: (type: string) => void;
 }
 
 export const useQueryBills = create<QueryBillsState>( set => ({
@@ -16,5 +16,7 @@ export const useQueryBills = create<QueryBillsState>( set => ({
   setDate: (year, month) => set(() => ({
     date: { year, month }
   })),
-  setType: (value) => set(() => ({type: value}))
+  setType: (value) => set(() => ({
+    type: value as QueryBillsState["type"]
+  }))
 }));

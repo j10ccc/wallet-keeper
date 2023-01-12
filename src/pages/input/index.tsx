@@ -1,6 +1,6 @@
 import { View } from "@tarojs/components";
 import NumberKeyboard from "@/components/NumberKeyboard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Taro from "@tarojs/taro";
 import PageView from "@/components/PageView";
 import { AtTabs, AtTabsPane } from "taro-ui";
@@ -50,7 +50,10 @@ const InputPage = () => {
     resetDraft,
   } = useInputDraft();
 
-  // TODO: 数字过长
+  useEffect(() => {
+    setTabIndex(tabList.findIndex(item => item.value === kind));
+  },[kind]);
+
   const onInput = (key: string) => {
     const currentNum = content.split(/[+]|-/).pop() || "0";
     if (key === ".") {

@@ -14,7 +14,7 @@ type InputDraftState = {
 }
 
 export const useInputDraft = create<InputDraftState>(set => ({
-  date: new Date().toLocaleDateString().split("/").join("-"),
+  date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
   value: 0,
   type: expenseItemList[0].value,
   kind: "expense",
@@ -23,10 +23,10 @@ export const useInputDraft = create<InputDraftState>(set => ({
   setType: (value) => set(() => ({type: value})),
   setKind: (value) => set(() => ({kind: value})),
   resetDraft: () => set({
-    date: new Date().toLocaleDateString().split("/").join("-"),
+    date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
     value: 0,
     type: expenseItemList[0].value,
-    // kind: "expense",
+    kind: "expense",
   }),
 
 }));
