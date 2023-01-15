@@ -1,6 +1,5 @@
 import { View } from "@tarojs/components";
-import { AtModal } from "taro-ui";
-import Calendar from "../calendar";
+import { AtCalendar, AtModal } from "taro-ui";
 
 import styles from "./index.module.scss";
 
@@ -19,7 +18,7 @@ const DateSelectorModal = (props: PropsType) => {
       isOpened={isShow}
     >
       <View className={styles.container}>
-        <Calendar
+        <AtCalendar
           onDayClick={(item) => onConfirm(item.value)}
           format="YYYY-M-D"
         />
