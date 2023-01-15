@@ -1,0 +1,13 @@
+@import "@/styles/variables";
+
+.header {
+  height: 300rpx;
+  padding: 100rpx 0 0 50rpx;
+  box-sizing: border-box;
+  background-color: $color-brand;
+
+  .title {
+    color: $color-white-0;
+    font-size: 1.5rem;
+  }
+}
