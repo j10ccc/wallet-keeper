@@ -1,5 +1,5 @@
 import { View, Text } from "@tarojs/components";
-import { memo, useRef, useState } from "react";
+import { memo } from "react";
 
 import styles from "./index.module.scss";
 

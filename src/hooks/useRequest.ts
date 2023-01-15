@@ -29,6 +29,7 @@ const useRequest = <TData extends TaroGeneral.IAnyObject, TParams>(
   const fetch = (params?: TParams) => {
     setLoading(true);
     service(params || config?.defaultParams).then((response) => {
+      // FIXME: Taro 请求错误也会进入
       if (config?.onSuccess) {
         config.onSuccess(response);
       }
