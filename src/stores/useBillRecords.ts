@@ -3,10 +3,15 @@ import create from "zustand";
 import storage from "./storage";
 
 type BillRecordsState = {
-  list: Bill.BillRecord[]
+  // list: Bill.BillRecord[]
+  dataSet: {
+    [key: string]: {
+      [key: string]: Bill.BillRecord[]
+    }
+  },
   addItem: (item: Bill.BillRecord) => void;
-  removeItem: (uid: string) => boolean;
-  replaceItem: (uid: string, value: Omit<Bill.BillRecord, "uid">) => void;
+  removeItem: (uid: string, date: string) => boolean;
+  replaceItem: (uid: string, date: string, value: Omit<Bill.BillRecord, "uid">) => void;
 }
 
 export const useBillRecords = create<
@@ -14,26 +19,59 @@ export const useBillRecords = create<
   [["zustand/persist", BillRecordsState]]
 >(
   persist(set => ({
-    list: [],
-    addItem: (item) => set(state => ({
-    // TODO: insert in order by date
-      list: [...state.list, item]
-    })),
-    removeItem: (uid) => {
+    // list: [],
+    dataSet: {},
+    addItem: (item) => set(state => {
+      const [year, month] = item.date.split("-");
+      if (state.dataSet[year] === undefined)
+        state.dataSet[year] = {};
+      if (state.dataSet[year][month] === undefined)
+        state.dataSet[year][month] = [];
+      state.dataSet[year][month].push(item);
+
+      return state;
+    }),
+    removeItem: (uid, date) => {
       let isFound = false;
       set(state => {
-        const index = state.list.findIndex(item => uid === item.uid);
-        if (index !== -1) isFound = true;
-        state.list.splice(index, 1);
+        const [year, month] = date.split("/");
+        try {
+          const index = state.dataSet[year][month].findIndex(
+            item => uid === item.uid
+          );
+          if (index !== -1) {
+            isFound = true;
+            state.dataSet[year][month].splice(index, 0);
+          }
+        } catch(error) {
+          console.log(error);
+        }
         return state;
       });
       return isFound;
     },
-    replaceItem: (uid: string, item) => set(state => {
-      state.removeItem(uid);
-      state.addItem({ uid, ...item});
-      return state;
-    })
+    replaceItem: (uid, date, value) => {
+      let isFound = false;
+      set(state => {
+        const [year, month] = date.split("/");
+        try {
+          const index = state.dataSet[year][month].findIndex(
+            item => uid === item.uid
+          );
+          if (index !== -1) {
+            isFound = true;
+            state.dataSet[year][month][index] = {
+              ...state.dataSet[year][month][index],
+              ...value
+            };
+          }
+        } catch(error) {
+          console.log(error);
+        }
+        return state;
+      });
+      return isFound;
+    },
   }),
   {
     name: "billRecords",

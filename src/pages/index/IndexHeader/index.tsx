@@ -64,7 +64,12 @@ const DateSelector = () => {
 
 const StatisticText = () => {
   const { date, type } = useQueryBills();
-  const { list } = useBillRecords();
+  const list = useBillRecords(
+    state => (state[date.year] === undefined || state[date.year][date.month] === undefined) ?
+      [] : state.dataSet[date.year][date.month]
+  );
+
+  // const list = dataSet[date.year][date.month];
 
   const [incomeTotal, setIncomeTotal] = useState(0);
   const [expenseTotal, setExpenseTotal] = useState(0);
