@@ -13,12 +13,22 @@ export const useBillRecords = create<
   BillRecordsState,
   [["zustand/persist", BillRecordsState]]
 >(
-  persist(set => ({
+  persist((set, get) => ({
     list: [],
-    addItem: (item) => set(state => ({
-    // TODO: insert in order by date
-      list: [...state.list, item]
-    })),
+    addItem: (item) => {
+      const date = item.date;
+      const [YEAR, MONTH, DAY] = date.split("-");
+      const list = get().list;
+      let index = list.findIndex(item => {
+        const [year, month, day] = item.date.split("-");
+        if (year <= YEAR && month <= MONTH && day <= DAY)
+          return true;
+      });
+      if (index === -1) index = list.length;
+      return set(state => ({
+        list: [...state.list.slice(0, index), item, ...state.list.slice(index)]
+      }));
+    },
     removeItem: (uid) => {
       let isFound = false;
       set(state => {
