@@ -16,7 +16,6 @@ import {
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("2022-01-01");
   const [genderIndex, setGenderIndex] = useState(0);
 
@@ -48,15 +47,13 @@ const RegisterPage = () => {
     }
   }, [loading]);
 
-  const onSubmit = (e: any) => {
+  const onSubmit = async (e: any) => {
     const formData = {
       username,
-      password,
       birthday,
       gender: genderList[genderIndex]
     };
     if (formData.username === "" ||
-        formData.password === "" ||
         formData.birthday === "" ||
         formData.gender === ""
     ) {
@@ -65,7 +62,11 @@ const RegisterPage = () => {
         title: "请完成表单"
       });
     } else {
-      run(formData);
+      const { code } = await Taro.login();
+      run({
+        username,
+        code
+      });
     }
 
   };
@@ -83,20 +84,11 @@ const RegisterPage = () => {
       <AtInput
         required
         name="username"
-        title="账号"
+        title="用户名"
         type="text"
-        placeholder="输入账号"
+        placeholder="输入用户名"
         value={username}
         onChange={(value: string) => setUsername(value)}
-      />
-      <AtInput
-        required
-        name="password"
-        title="密码"
-        type="password"
-        placeholder="输入密码"
-        value={password}
-        onChange={(value: string) => setPassword(value)}
       />
       <Picker value={birthday} mode="date" onChange={(e) => setBirthday(e.detail.value)}>
         <AtList>

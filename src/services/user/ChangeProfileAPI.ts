@@ -16,7 +16,7 @@ export const ChangeGenderAPI = (data: User.ChangeGender_Data) => {
   const token = JSON.parse(Taro.getStorageSync("userInfo")).state.token;
   return request<User.ChangeGender_Result>(
     "/api/user/change/gender", {
-      method: "POST",
+      method: "GET",
       header: { "Cookie": token },
       data
     },
@@ -27,7 +27,7 @@ export const ChangeBirthdayAPI = (data: User.ChangeBirthday_Data) => {
   const token = JSON.parse(Taro.getStorageSync("userInfo")).state.token;
   return request<User.ChangeBirthday_Result>(
     "/api/user/change/birthday", {
-      method: "POST",
+      method: "GET",
       header: { "Cookie": token },
       data
     },

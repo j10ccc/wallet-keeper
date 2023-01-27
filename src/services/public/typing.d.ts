@@ -11,8 +11,9 @@ declare namespace PublicAPI {
     token: string;
   }
 
-  interface RegisterAPI_Data extends Omit<UserInfo, "token"> {
-    password: string;
+  interface RegisterAPI_Data {
+    username: string;
+    code: string;
   }
 
   interface RegisterAPI_Result extends BaseResult {
@@ -22,6 +23,15 @@ declare namespace PublicAPI {
   interface LoginAPI_Data {
     username: string;
     password: string;
+  }
+
+  interface LoginAPI_Data {
+    username: string;
+    password: string;
+  }
+
+  interface LoginByWXAPI_Data {
+    code: string;
   }
 
   interface LoginAPI_Result extends BaseResult {

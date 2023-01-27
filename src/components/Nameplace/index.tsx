@@ -1,9 +1,10 @@
 import { View, Text } from "@tarojs/components";
 import { useUser } from "@/stores/useUser";
 import { AtAvatar, AtButton, AtCard } from "taro-ui";
-
-import styles from "./index.module.scss";
 import Taro from "@tarojs/taro";
+import useRequest from "@/hooks/useRequest";
+import { LoginByWXAPI } from "@/services/public/LoginAPI";
+import styles from "./index.module.scss";
 
 const Nameplace = () => {
   const {
@@ -12,6 +13,30 @@ const Nameplace = () => {
     birthday,
     isLogin
   } = useUser();
+
+  const { setUser, setIsLogin} = useUser();
+
+  const { run } = useRequest(LoginByWXAPI, {
+    manual: true,
+    onBefore: () => Taro.showLoading({title: "正在登录"}),
+    onSuccess: (res) => {
+      Taro.hideLoading();
+      if (res.data.code === 200) {
+        setUser({
+          ...res.data.data,
+          token: (res.cookies || []).join("; ")
+        });
+        setIsLogin(true);
+        Taro.showToast({title: "登录成功", icon: "success"});
+      } else {
+        Taro.showToast({
+          title: `登录失败${res.data.msg || res.errMsg}`,
+          icon: "none"
+        });
+      }
+    },
+    onError: () => Taro.hideLoading()
+  });
 
   const handleEnterProfile = () => {
     Taro.navigateTo({
@@ -25,9 +50,22 @@ const Nameplace = () => {
     });
   };
 
+  const loginWX = async () => {
+    const { code } = await Taro.login();
+    run({ code });
+  };
+
   const handleLogin = async () => {
-    Taro.navigateTo({
-      url: "login/index"
+    Taro.showModal({
+      title: "选择",
+      content: "是否使用微信登录",
+      cancelText: "账号登录",
+      success: (res) => {
+        res.cancel && Taro.navigateTo({
+          url: "login/index"
+        });
+        res.confirm && loginWX();
+      },
     });
   };
 
