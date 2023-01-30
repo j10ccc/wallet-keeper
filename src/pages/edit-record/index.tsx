@@ -40,8 +40,8 @@ const EditRecordPage = () => {
   else defaultValue = {
     date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
     value: 0,
-    type: expenseItemList[0].value,
-    kind: "expense",
+    kind: expenseItemList[0].value,
+    type: "expense",
   };
 
   const recordRef = useRef<DraftType>(defaultValue);
@@ -116,8 +116,8 @@ const EditRecordPage = () => {
   const handleSelectKind = (e: { kind: string, type: string }) => {
     if (recordRef.current) {
       // FIXME:
-      recordRef.current.type = e.kind;
-      recordRef.current.kind = e.type;
+      recordRef.current.type = e.type;
+      recordRef.current.kind = e.kind;
     }
   };
 
@@ -126,8 +126,8 @@ const EditRecordPage = () => {
       <KindSelector
         onSelect={handleSelectKind}
         defaultValue={{
-          kind: recordRef.current?.type,
-          type: recordRef.current?.kind
+          kind: recordRef.current?.kind,
+          type: recordRef.current?.type
         }}
       />
       <View className={styles.sum}>

@@ -51,8 +51,8 @@ const InputPage = () => {
   } = useInputDraft();
 
   useEffect(() => {
-    setTabIndex(tabList.findIndex(item => item.value === kind));
-  },[kind]);
+    setTabIndex(tabList.findIndex(item => item.value === type));
+  },[type]);
 
   const onInput = (key: string) => {
     const currentNum = content.split(/[+]|-/).pop() || "0";
@@ -112,11 +112,11 @@ const InputPage = () => {
 
   const handleChangeTab = (index: number) => {
     setTabIndex(index);
-    setKind(tabList[index].value);
+    setType(tabList[index].value);
     if (tabList[index].value === "expense")
-      setType(expenseItemList[0].value);
+      setKind(expenseItemList[0].value);
     else
-      setType(incomeItemList[0].value);
+      setKind(incomeItemList[0].value);
   };
 
   return <PageView>

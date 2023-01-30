@@ -26,8 +26,8 @@ export const useInputDraft = create<InputDraftState>(set => ({
   resetDraft: () => set({
     date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
     value: 0,
-    type: expenseItemList[0].value,
-    kind: "expense",
+    kind: expenseItemList[0].value,
+    type: "expense",
   }),
 
 }));
