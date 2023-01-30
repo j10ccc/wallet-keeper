@@ -46,16 +46,16 @@ const TodayBill = (props: PropsType) => {
 
   useEffect(() => {
     if (type === "default") setValidList(list);
-    else setValidList(list.filter(item => item.kind === type));
+    else setValidList(list.filter(item => item.type === type));
   }, [type, list]);
 
   useEffect(() => {
     let income = 0;
     let expense = 0;
-    income = list.filter(item => item.kind === "income")
+    income = list.filter(item => item.type === "income")
       .map(item => item.value)
       .reduce((prev, curr) => prev + curr, 0);
-    expense = list.filter(item => item.kind === "expense")
+    expense = list.filter(item => item.type === "expense")
       .map(item => item.value)
       .reduce((prev, curr) => prev + curr, 0);
     income = Math.floor(income * 100 + 0.5) / 100;
@@ -85,25 +85,25 @@ const TodayBill = (props: PropsType) => {
               <AtIcon
                 prefixClass="icon"
                 size="28"
-                value={item.type}
+                value={item.kind}
                 className={classNames(
                   styles["type"],
-                  styles[item.kind]
+                  styles[item.type]
                 )}/>
             </View>
             <View className={styles["detail-col"]}>
-              <Text className={styles.type}>{itemValueLabelMap[item.type]}</Text>
+              <Text className={styles.type}>{itemValueLabelMap[item.kind]}</Text>
               <Text className={styles.desc}>{item.uid}</Text>
             </View>
             <View className={styles["value-col"]}>
               <Text
                 className={classNames(
                   styles["type"],
-                  styles[item.kind]
+                  styles[item.type]
                 )}
               >
-                {item.kind === "income" && "+"}
-                {item.kind === "expense" && "-"}
+                {item.type === "income" && "+"}
+                {item.type === "expense" && "-"}
                 {item.value.toFixed(2)}
               </Text>
             </View>

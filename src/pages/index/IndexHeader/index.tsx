@@ -76,14 +76,14 @@ const StatisticText = () => {
     income = list
       .filter(item =>
         item.date.startsWith(`${date.year}-${date.month}-`) &&
-        item.kind === "income")
+        item.type === "income")
       .map(item => item.value)
       .reduce((prev, curr) => prev + curr, 0);
 
     expense = list
       .filter(item =>
         item.date.startsWith(`${date.year}-${date.month}-`) &&
-        item.kind === "expense")
+        item.type === "expense")
       .map(item => item.value)
       .reduce((prev, curr) => prev + curr, 0);
 
