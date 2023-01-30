@@ -7,6 +7,7 @@ import TodayBill from "@/components/TodayBill";
 
 import styles from "./index.module.scss";
 import { ScrollView } from "@tarojs/components";
+import CreateRecordBubble from "./CreateRecordBubble";
 
 type ValidMapType = {
   // key: date string
@@ -54,6 +55,7 @@ const IndexPage = () => {
           />
         )}
       </ScrollView>
+      <CreateRecordBubble />
     </PageView>
   );
 };

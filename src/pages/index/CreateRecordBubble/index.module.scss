@@ -1,0 +1,26 @@
+@import "@/styles/variables";
+
+$tab-bar-height: 120rpx;
+
+.bubble {
+  position: fixed;
+  right: 36rpx;
+  bottom: calc(96rpx + env(safe-area-inset-bottom) + $tab-bar-height);
+  padding: 24rpx;
+  border-radius: 100rpx;
+  background-color: $color-white-0;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  transition: all .2s;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+
+  .text {
+    color: $color-brand-dark;
+    font-weight: 600;
+  }
+}
+
+.bubble:active {
+  scale: 110%;
+}
