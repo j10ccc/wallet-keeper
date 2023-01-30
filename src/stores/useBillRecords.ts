@@ -17,10 +17,10 @@ export const useBillRecords = create<
     list: [],
     addItem: (item) => {
       const date = item.date;
-      const [YEAR, MONTH, DAY] = date.split("-");
+      const [YEAR, MONTH, DAY] = date.split("-").map(item => parseInt(item));
       const list = get().list;
       let index = list.findIndex(item => {
-        const [year, month, day] = item.date.split("-");
+        const [year, month, day] = item.date.split("-").map(item => parseInt(item));
         if (year <= YEAR && month <= MONTH && day <= DAY)
           return true;
       });
@@ -34,16 +34,16 @@ export const useBillRecords = create<
       set(state => {
         const index = state.list.findIndex(item => uid === item.uid);
         if (index !== -1) isFound = true;
-        state.list.splice(index, 1);
-        return state;
+        return {
+          list: [...state.list.slice(0, index), ...state.list.slice(index + 1)]
+        };
       });
       return isFound;
     },
-    replaceItem: (uid: string, item) => set(state => {
-      state.removeItem(uid);
-      state.addItem({ uid, ...item});
-      return state;
-    })
+    replaceItem: (uid: string, item) => {
+      get().removeItem(uid);
+      get().addItem({ uid, ...item });
+    },
   }),
   {
     name: "billRecords",

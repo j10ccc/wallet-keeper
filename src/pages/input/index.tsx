@@ -89,7 +89,6 @@ const InputPage = () => {
     const res = evalExpOfTwo(content);
     setValue(res);
     setContent("0");
-    // console.log(value, kind, type, date);
     addItem({
       uid: useGuid().guid,
       value: res,

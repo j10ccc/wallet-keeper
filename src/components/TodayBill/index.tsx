@@ -5,6 +5,9 @@ import { AtIcon } from "taro-ui";
 import classNames from "classnames";
 import { itemValueLabelMap } from "@/pages/constants/RecordItemList";
 import { useEffect, useState } from "react";
+import Taro from "@tarojs/taro";
+import { useBillRecords } from "@/stores/useBillRecords";
+import { useEditDraft } from "@/stores/useEditDraft";
 
 type PropsType = {
   date: string;
@@ -20,7 +23,26 @@ const TodayBill = (props: PropsType) => {
     expense: 0
   });
 
+  const deleteBill = useBillRecords(state => state.removeItem);
+  const setEditDraft = useEditDraft(state => state.setDraft);
+
   const [validList, setValidList] = useState<Bill.BillRecord[]>([]);
+
+  const handleLongPress = (item: Bill.BillRecord) => {
+    Taro.showActionSheet({
+      itemList: ["编辑", "删除"],
+      success: (e) => {
+        if (e.tapIndex === 0) {
+          setEditDraft(item);
+          Taro.navigateTo({
+            url: "/pages/edit-record/index?mode=create"
+          });
+        } else if (e.tapIndex === 1) {
+          deleteBill(item.uid);
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     if (type === "default") setValidList(list);
@@ -54,7 +76,11 @@ const TodayBill = (props: PropsType) => {
       </View>
       <View className={styles.body}>
         {validList.map(item =>
-          <View key={item.uid} className={styles["list-item"]}>
+          <View
+            key={item.uid}
+            className={styles["list-item"]}
+            onLongPress={() => handleLongPress(item)}
+          >
             <View className={styles["icon-col"]}>
               <AtIcon
                 prefixClass="icon"

@@ -1,0 +1,29 @@
+@import "@/styles/variables";
+
+.container {
+  display: flex;
+  justify-content: flex-end;
+  height: 30Px;
+  padding: 4Px 10Px;
+  border-top: 1Px solid $color-gray-4;
+
+  .content {
+    color: $color-brand;
+    font-size: 1.5em;
+    font-weight: 600;
+  }
+}
+
+.sum {
+  display: flex;
+  justify-content: flex-end;
+  height: 30Px;
+  padding: 4Px 10Px;
+  border-top: 1Px solid $color-gray-4;
+
+  .content {
+    color: $color-brand;
+    font-size: 1.5em;
+    font-weight: 600;
+  }
+}
