@@ -2,6 +2,7 @@ import { expenseItemList } from "@/pages/constants/RecordItemList";
 import create from "zustand";
 
 type InputDraftState = {
+  guid?: string;
   date: string;
   value: number;
   type: string;

@@ -2,15 +2,18 @@ import { View } from "@tarojs/components";
 import { AtCalendar, AtModal } from "taro-ui";
 
 import styles from "./index.module.scss";
+import { useState } from "react";
 
 type PropsType = {
+  defaultDate?: string;
   isShow: boolean
   onConfirm: (date: string) => void;
   onClose: () => void;
 }
 
 const DateSelectorModal = (props: PropsType) => {
-  const { isShow, onClose, onConfirm } = props;
+  const { isShow, onClose, onConfirm, defaultDate } = props;
+  const [date, setDate] = useState(defaultDate);
 
   return (
     <AtModal
@@ -19,10 +22,13 @@ const DateSelectorModal = (props: PropsType) => {
     >
       <View className={styles.container}>
         <AtCalendar
-          onDayClick={(item) => onConfirm(item.value)}
+          currentDate={date || Date.now()}
+          onDayClick={(e) => {
+            setDate(e.value);
+            onConfirm(e.value);
+          }}
           format="YYYY-M-D"
         />
-
       </View>
     </AtModal>
   );

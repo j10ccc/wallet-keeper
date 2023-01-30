@@ -21,6 +21,7 @@ specifiers:
   '@tarojs/taro': 3.5.11
   '@tarojs/taro-h5': 3.5.11
   '@tarojs/webpack5-runner': 3.5.11
+  '@types/lodash-es': ^4.14.191
   '@types/react': ^18.0.0
   '@types/webpack-env': ^1.13.6
   '@typescript-eslint/eslint-plugin': ^5.48.0
@@ -33,7 +34,7 @@ specifiers:
   eslint-plugin-import: ^2.12.0
   eslint-plugin-react: ^7.31.11
   eslint-plugin-react-hooks: ^4.2.0
-  lodash: 4.17.15
+  lodash-es: 4.17.15
   react: ^18.0.0
   react-dom: ^18.0.0
   react-refresh: ^0.11.0
@@ -62,7 +63,7 @@ dependencies:
   '@tarojs/taro-h5': 3.5.11_@types+react@18.0.26
   classnames: 2.3.2
   dayjs: 1.11.7
-  lodash: 4.17.15
+  lodash-es: 4.17.15
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   taro-ui: 3.1.0-beta.4_3ajq4bbqzvs625arex6eu5nw7e
@@ -73,6 +74,7 @@ devDependencies:
   '@pmmmwh/react-refresh-webpack-plugin': 0.5.10_uusriqs5flz55rfdoscscc6fjy
   '@tarojs/cli': 3.5.11_@types+react@18.0.26
   '@tarojs/webpack5-runner': 3.5.11_6de4gl2kzfodpu77a2cpyaf2ye
+  '@types/lodash-es': 4.17.6
   '@types/react': 18.0.26
   '@types/webpack-env': 1.18.0
   '@typescript-eslint/eslint-plugin': 5.48.0_k73wpmdolxikpyqun3p36akaaq
@@ -2398,6 +2400,12 @@ packages:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
       '@types/node': 18.11.18
+    dev: true
+
+  /@types/lodash-es/4.17.6:
+    resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
+    dependencies:
+      '@types/lodash': 4.14.191
     dev: true
 
   /@types/lodash.debounce/4.0.7:
@@ -8622,6 +8630,10 @@ packages:
     dependencies:
       p-locate: 5.0.0
 
+  /lodash-es/4.17.15:
+    resolution: {integrity: sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==}
+    dev: false
+
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
 
@@ -8646,10 +8658,6 @@ packages:
   /lodash.uniq/4.5.0:
     resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
     dev: true
-
-  /lodash/4.17.15:
-    resolution: {integrity: sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==}
-    dev: false
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -9085,8 +9093,8 @@ packages:
     resolution: {integrity: sha512-AjuBYxghx3LZeTtWQ48TfDMxoACGRUA+NdPrgl+mPPNgi5g0YXn3sDELNHRw0LcjTxfqhVufwLL65AjwT+W+FQ==}
     dev: true
 
-  /miniprogram-compiler/0.2.1:
-    resolution: {integrity: sha512-AHQgJFTnVPMcVBUUdKHlCRC3guK212XkWME0awMQiUgpzp/eIbb3jgFdkl3ib9nDbbEK+m2fSBs0++vwetWJ9Q==}
+  /miniprogram-compiler/0.2.2:
+    resolution: {integrity: sha512-fiJXv/15jCcRAU8YKcO7S7fkPKLa5ZBgpLN+d6B3r3KMktM5tAkDEQ+zm6aTfNoHurYOHcRyPyGf26gqQXlFXg==}
     dependencies:
       glob: 7.2.3
       unescape-js: 1.1.4
@@ -9102,7 +9110,7 @@ packages:
       csso: 3.5.1
       j-component: 1.4.7
       less: 3.13.1
-      miniprogram-compiler: 0.2.1
+      miniprogram-compiler: 0.2.2
       postcss: 7.0.39
     dev: true
 

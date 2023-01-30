@@ -1,0 +1,24 @@
+@import "@/styles/variables";
+
+.container {
+  display: flex;
+  height: 30Px;
+  padding: 4Px 12Px;
+  align-items: center;
+  gap: 8Px;
+
+  .extension {
+    background-color: $color-gray-4;
+    padding: 4Px 8Px;
+    border-radius: 8Px;
+    transition: all .1s;
+
+    .label {
+      color: $color-black-4;
+    }
+  }
+
+  .extension:active {
+    filter: brightness(90%);
+  }
+}
