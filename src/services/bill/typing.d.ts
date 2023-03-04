@@ -6,4 +6,11 @@ declare namespace Bill {
     value: number; // 13.89
     kind: string; // meals
   }
+
+  interface UploadPhoto_Data {
+    filePath: string;
+    type?: "default" | "train"
+  }
+
+  interface UploadPhoto_Result extends Common.IResponse<Partial<BillRecord>> {}
 }
