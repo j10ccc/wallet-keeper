@@ -1,6 +1,6 @@
 export default definePageConfig({
-  navigationBarBackgroundColor: "#07c160",
+  navigationBarBackgroundColor: "#29cf74",
   navigationBarTextStyle: "white",
-  navigationBarTitleText: "资产",
+  navigationBarTitleText: "修改密码",
   usingComponents: {}
 });

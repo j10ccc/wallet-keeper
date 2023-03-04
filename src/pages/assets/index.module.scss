@@ -1,0 +1,13 @@
+@import "@/styles/variables";
+
+.background::after {
+  content: "";
+  width: 120%;
+  height: 20%;
+  position: absolute;
+  left: -10%;
+  top: 0;
+  z-index: -1;
+  border-radius: 0 0 50% 50%;
+  background-color: $color-brand;
+}

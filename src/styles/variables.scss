@@ -1,7 +1,3 @@
-$color-brand: #07c160;
-$color-brand-light: #83bc8e;
-$color-brand-dark: #478553;
-
 $color-white-0: #ffffff;
 $color-white-1: #fafafa;
 $color-white-2: #f5f5f5;
@@ -18,4 +14,17 @@ $color-gray-2: #bfbfbf;
 $color-gray-3: #d9d9d9;
 $color-gray-4: #f0f0f0;
 
+$color-green-1: #e6ffee;
+$color-green-2: #a6f5c2;
+$color-green-3: #79e8a3;
+$color-green-4: #4fdb89;
+$color-green-5: #29cf74;
+$color-green-6: #07c160;
+$color-green-7: #009c50;
+$color-green-8: #007541;
+
 $color-orange: #e2ad49;
+
+$color-brand: $color-green-5;
+$color-brand-light: $color-green-3;
+$color-brand-dark: #478553;

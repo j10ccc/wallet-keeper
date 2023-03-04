@@ -1,7 +1,7 @@
 export default definePageConfig({
-  navigationBarBackgroundColor: "#07c160",
+  navigationBarBackgroundColor: "#29cf74",
   navigationBarTextStyle: "white",
-  navigationBarTitleText: "注册",
+  navigationBarTitleText: "我的资料",
   usingComponents: {}
 });
 

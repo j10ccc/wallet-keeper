@@ -1,10 +1,11 @@
 import { View, Text } from "@tarojs/components";
 import { useUser } from "@/stores/useUser";
-import { AtAvatar, AtButton, AtCard } from "taro-ui";
+import { AtAvatar } from "taro-ui";
 import Taro from "@tarojs/taro";
 import useRequest from "@/hooks/useRequest";
 import { LoginByWXAPI } from "@/services/public/LoginAPI";
 import styles from "./index.module.scss";
+import classNames from "classnames";
 
 const Nameplace = () => {
   const {
@@ -70,14 +71,18 @@ const Nameplace = () => {
   };
 
   return (
-    <AtCard title="个人信息">
-      {isLogin ?
-        <View>
-          <View className={styles.primary} onClick={handleEnterProfile}>
-            <AtAvatar />
+    <View className={styles.container}>
+      <View className={styles["avatar-wrapper"]}>
+        <AtAvatar size="large" circle/>
+      </View>
+
+      { isLogin ?
+        <>
+          <View className={styles.header} onClick={handleEnterProfile}>
             <Text className={styles.username}>{ username }</Text>
           </View>
-          <View className={styles.secondary}>
+
+          <View className={styles.body}>
             <View className={styles.desc}>
               <Text className={styles.title}>性别</Text>
               <Text className={styles.content}>{ gender}</Text>
@@ -87,13 +92,35 @@ const Nameplace = () => {
               <Text className={styles.content}>{ birthday }</Text>
             </View>
           </View>
-        </View> :
-        <View>
-          <AtButton type="primary" size="small" onClick={handleLogin}>登录</AtButton>
-          <AtButton size="small" onClick={handleRegister}>注册</AtButton>
+        </> :
+        <View className={styles.header} onClick={handleEnterProfile}>
+          <Text className={styles.username}>未登录</Text>
         </View>
       }
-    </AtCard>
+      <View className={styles.actions}>
+        {
+          isLogin ?
+            <View style={{ flex: "auto"}} className={styles.button} onClick={handleEnterProfile}>
+              <Text className={styles.label}>编辑</Text>
+            </View> :
+            <>
+              <View
+                style={{ flex: "0 50%" }}
+                className={classNames([styles.button, styles.primary])}
+                onClick={handleRegister}
+              >
+                <Text className={styles.label}>创建账号</Text>
+              </View>
+              <View style={{ flex: "0 50%" }}
+                className={classNames([styles.button, styles.secondary])}
+                onClick={handleLogin}
+              >
+                <Text className={styles.label}>登陆</Text>
+              </View>
+            </>
+        }
+      </View>
+    </View>
   );
 };
 

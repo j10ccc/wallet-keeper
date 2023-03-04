@@ -1,7 +1,36 @@
 @import "@/styles/variables";
 
-.primary {
-  margin: 0 auto;
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 40Px 16Px 16Px 16Px;
+  position: relative;
+  margin: 12Px;
+  margin-top: 48Px;
+  border-radius: 32Px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  background-color: $color-white-0;
+}
+
+$avatar-height: 70Px;
+
+.avatar-wrapper {
+  background-color: $color-white-0;
+  margin: auto;
+  width: $avatar-height;
+  height: $avatar-height;
+  border-radius: $avatar-height;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: $avatar-height / -2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  margin: 12Px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,9 +41,9 @@
   }
 }
 
-.secondary {
+.body {
   display: flex;
-
+  margin-bottom: 12Px;
 }
 
 .desc {
@@ -32,4 +61,31 @@
     font-weight: 600;
   }
 
+}
+
+.actions {
+  display: flex;
+  gap: 12Px;
+
+  .button {
+    background-color: $color-brand;
+    color: $color-white-0;
+    text-align: center;
+    padding: 8Px 12Px;
+    border-radius: 12Px;
+
+    .label {
+      font-size: 1.1rem;
+    }
+  }
+
+  .primary {
+    background-color: $color-brand;
+    color: $color-white-0;
+  }
+
+  .secondary {
+    background-color: $color-green-1;
+    color: $color-brand;
+  }
 }
