@@ -1,0 +1,53 @@
+@import "@/styles/variables";
+
+.main {
+  display: flex;
+  justify-content: space-between;
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 12Px;
+
+    .label {
+      color: $color-gray-1;
+    }
+
+    .value {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.process {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 10Px;
+  padding-top: 12Px;
+
+  .dot {
+    position: relative;
+  }
+
+  .dot::before {
+    position: absolute;
+    content: "";
+    height: .4rem;
+    width: .4rem;
+    border-radius: 100%;
+    background-color: $color-gray-2;
+    opacity: 40%;
+    right: 0;
+  }
+
+  .expense:before {
+    background-color: $color-brand;
+  }
+
+  .income:before {
+    background-color: $color-orange;
+  }
+
+
+}

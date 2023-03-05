@@ -1,0 +1,28 @@
+@import "@/styles/variables";
+
+.card {
+  background-color: $color-white-0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 16Px;
+  border-radius: 16Px;
+  margin: 0 12Px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12Px 0;
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+  }
+
+  .body {}
+
+  .footer {
+    padding-bottom: 16Px;
+  }
+}
