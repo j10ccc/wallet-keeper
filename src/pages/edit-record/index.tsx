@@ -29,7 +29,7 @@ const evalExpOfTwo = (content: string): number => {
   return Math.floor(res * 100 + 0.5) / 100;
 };
 
-export type DraftType = Omit<Bill.BillRecord, "uid"> & { uid?: string };
+export type DraftType = Omit<BillAPI.BillRecord, "uid"> & { uid?: string };
 
 const EditRecordPage = () => {
   // TODO: loading cache
@@ -47,7 +47,7 @@ const EditRecordPage = () => {
   const recordRef = useRef<DraftType>(defaultValue);
   const [content, setContent] = useState(recordRef.current?.value.toString() || "0.00");
 
-  const { replaceItem, addItem } = useBillRecords();
+  const { updateItem, addItem } = useBillRecords();
   const resetDraft = useEditDraft(state => state.reset);
 
   /**
@@ -62,7 +62,7 @@ const EditRecordPage = () => {
         ...recordRef.current
       });
     } else if (mode === "update") {
-      replaceItem(
+      updateItem(
         recordRef.current!.uid!,
         omit(recordRef.current!, ["uid"])
       );

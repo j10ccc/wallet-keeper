@@ -11,7 +11,7 @@ import CreateRecordBubble from "./CreateRecordBubble";
 
 type ValidMapType = {
   // key: date string
-  [key: string]: Bill.BillRecord[]
+  [key: string]: BillAPI.BillRecord[]
 }
 
 const IndexPage = () => {

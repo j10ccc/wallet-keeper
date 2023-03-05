@@ -11,7 +11,7 @@ import { useEditDraft } from "@/stores/useEditDraft";
 
 type PropsType = {
   date: string;
-  list: Bill.BillRecord[],
+  list: BillAPI.BillRecord[],
   type: string;
 }
 
@@ -26,9 +26,9 @@ const TodayBill = (props: PropsType) => {
   const deleteBill = useBillRecords(state => state.removeItem);
   const setEditDraft = useEditDraft(state => state.setDraft);
 
-  const [validList, setValidList] = useState<Bill.BillRecord[]>([]);
+  const [validList, setValidList] = useState<BillAPI.BillRecord[]>([]);
 
-  const handleLongPress = (item: Bill.BillRecord) => {
+  const handleLongPress = (item: BillAPI.BillRecord) => {
     Taro.showActionSheet({
       itemList: ["编辑", "删除"],
       success: (e) => {

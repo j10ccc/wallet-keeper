@@ -1,8 +1,8 @@
 import create from "zustand";
 
 type EditDraftState = {
-  record: Bill.BillRecord | null,
-  setDraft: (item: Bill.BillRecord) => void;
+  record: BillAPI.BillRecord | null,
+  setDraft: (item: BillAPI.BillRecord) => void;
   reset: () => void;
 }
 
