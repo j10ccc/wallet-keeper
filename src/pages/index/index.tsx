@@ -40,7 +40,7 @@ const IndexPage = () => {
   }, [date, originList]);
 
   return (
-    <PageView>
+    <PageView isTabPage>
       <IndexHeader />
       <ScrollView
         className={styles["scroll-view"]}

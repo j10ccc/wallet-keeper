@@ -119,7 +119,7 @@ const InputPage = () => {
       setKind(incomeItemList[0].value);
   };
 
-  return <PageView>
+  return <PageView isTabPage>
     <View style={{ flex: "1" }}>
       <AtTabs
         tabList={tabList}

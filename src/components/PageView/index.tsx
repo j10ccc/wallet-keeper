@@ -1,15 +1,20 @@
 import { View } from "@tarojs/components";
+import classNames from "classnames";
 
 import styles from "./index.module.scss";
 
 type PropsType = {
   children?: React.ReactNode
+  isTabPage?: boolean
 }
 
 const PageView = (props: PropsType) => {
-  const { children } = props;
+  const { children, isTabPage } = props;
   return <View
-    className={styles["page-view"]}
+    className={classNames([
+      styles["page-view"],
+      isTabPage ? styles["tab-page"]: undefined
+    ])}
   >
     {children}
   </View>;

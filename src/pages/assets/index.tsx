@@ -7,7 +7,7 @@ import styles from "./index.module.scss";
 
 const AssetsPage = () => {
   return (
-    <PageView>
+    <PageView isTabPage>
       <View className={styles.background} />
       <ScrollView enableFlex className={styles["scroll-view"]}>
         <Nameplace />
