@@ -36,7 +36,7 @@ const ExpenseSumChart = (props: PropsType) => {
 
   return (
     <MediaCard title="日收支统计" style={{ height: "300Px"}}>
-      <F2>
+      <F2 chartId="expense-sum-chart">
         <Canvas>
           <Chart data={newData} scale={scale} >
             <Axis

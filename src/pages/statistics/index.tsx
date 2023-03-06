@@ -1,9 +1,11 @@
+import PageView from "@/components/PageView";
 import { useBillRecords } from "@/stores/useBillRecords";
-import { ScrollView } from "@tarojs/components";
+import { ScrollView, View } from "@tarojs/components";
 import { useEffect, useState } from "react";
 import ExpenseSumChart from "./ExpenseSumChart";
 
 import styles from "./index.module.scss";
+import KindChart from "./KindChart";
 
 const StatisticsPage = () => {
   // TODO: monthly statistics
@@ -33,13 +35,18 @@ const StatisticsPage = () => {
   }, [list]);
 
   return (
-    <ScrollView enableFlex className={styles["scroll-view"]}>
-      <ExpenseSumChart
-        data={monthlyData}
-        month={date.month}
-        year={date.year}
-      />
-    </ScrollView>
+    <PageView>
+      <ScrollView scrollY className={styles["scroll-view"]}>
+        <View className={styles.container}>
+          <ExpenseSumChart
+            data={monthlyData}
+            month={date.month}
+            year={date.year}
+          />
+          <KindChart data={monthlyData} />
+        </View>
+      </ScrollView>
+    </PageView>
   );
 };
 
