@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@antv/f2': ^4.0.41
   '@babel/core': ^7.8.0
   '@babel/runtime': ^7.7.7
   '@pmmmwh/react-refresh-webpack-plugin': ^0.5.5
@@ -45,6 +46,7 @@ specifiers:
   zustand: ^4.2.0
 
 dependencies:
+  '@antv/f2': 4.0.41
   '@babel/runtime': 7.20.7
   '@tarojs/components': 3.5.11_@types+react@18.0.26
   '@tarojs/helper': 3.5.11
@@ -98,6 +100,51 @@ packages:
     dependencies:
       '@jridgewell/gen-mapping': 0.1.1
       '@jridgewell/trace-mapping': 0.3.17
+
+  /@antv/adjust/0.2.5:
+    resolution: {integrity: sha512-MfWZOkD9CqXRES6MBGRNe27Q577a72EIwyMnE29wIlPliFvJfWwsrONddpGU7lilMpVKecS3WAzOoip3RfPTRQ==}
+    dependencies:
+      '@antv/util': 2.0.17
+      tslib: 1.14.1
+    dev: false
+
+  /@antv/event-emitter/0.1.3:
+    resolution: {integrity: sha512-4ddpsiHN9Pd4UIlWuKVK1C4IiZIdbwQvy9i7DUSI3xNJ89FPUFt8lxDYj8GzzfdllV0NkJTRxnG+FvLk0llidg==}
+    dev: false
+
+  /@antv/f2-graphic/0.0.13:
+    resolution: {integrity: sha512-4WHYfXyvfnfYizb1ArzqeiT0lPQNq3CgKc747e+Q14CBcdeV4+psxjxG6b6KuxFi+ih5MhPyFSQFioyk7eUHGw==}
+    dependencies:
+      '@antv/util': 2.0.17
+      '@babel/runtime': 7.20.7
+    dev: false
+
+  /@antv/f2/4.0.41:
+    resolution: {integrity: sha512-TOUsMhbmqX2Zu8TMFBU8dZf7wQfwlvHT0W7UHZWAvk4mZszxarC5JE6ajXfpEJDAcYs0DJpcR5yGcJL9H0CyIg==}
+    dependencies:
+      '@antv/adjust': 0.2.5
+      '@antv/event-emitter': 0.1.3
+      '@antv/f2-graphic': 0.0.13
+      '@antv/scale': 0.3.18
+      '@antv/util': 2.0.17
+      '@babel/runtime': 7.20.7
+      d3-cloud: 1.2.5
+    dev: false
+
+  /@antv/scale/0.3.18:
+    resolution: {integrity: sha512-GHwE6Lo7S/Q5fgaLPaCsW+CH+3zl4aXpnN1skOiEY0Ue9/u+s2EySv6aDXYkAqs//i0uilMDD/0/4n8caX9U9w==}
+    dependencies:
+      '@antv/util': 2.0.17
+      fecha: 4.2.3
+      tslib: 2.4.1
+    dev: false
+
+  /@antv/util/2.0.17:
+    resolution: {integrity: sha512-o6I9hi5CIUvLGDhth0RxNSFDRwXeywmt6ExR4+RmVAzIi48ps6HUy+svxOCayvrPBN37uE6TAc2KDofRo0nK9Q==}
+    dependencies:
+      csstype: 3.1.1
+      tslib: 2.4.1
+    dev: false
 
   /@babel/code-frame/7.0.0-beta.44:
     resolution: {integrity: sha512-cuAuTTIQ9RqcFRJ/Y8PvTh+paepNcaGxwQwjIDRWPXmzzyAeCO4KqS9ikMvq0MCbRk6GlYKwfzStrcP3/jSL8g==}
@@ -4801,6 +4848,16 @@ packages:
       array-find-index: 1.0.2
     dev: true
 
+  /d3-cloud/1.2.5:
+    resolution: {integrity: sha512-4s2hXZgvs0CoUIw31oBAGrHt9Kt/7P9Ik5HIVzISFiWkD0Ga2VLAuO/emO/z1tYIpE7KG2smB4PhMPfFMJpahw==}
+    dependencies:
+      d3-dispatch: 1.0.6
+    dev: false
+
+  /d3-dispatch/1.0.6:
+    resolution: {integrity: sha512-fVjoElzjhCEy+Hbn8KygnmMS7Or0a9sI2UzGwoB7cCtvI1XpVN9GpoYlnb3xt2YV66oXYb1fLJ8GMvP4hdU1RA==}
+    dev: false
+
   /dashdash/1.14.1:
     resolution: {integrity: sha512-jRFi8UDGo6j+odZiEpjazZaWqEal3w/basFjQHQEwVtZJGDpxbH1MeYluwCS8Xq5wmLJooDlMgvVarmWfGM44g==}
     engines: {node: '>=0.10'}
@@ -6342,6 +6399,10 @@ packages:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
     dependencies:
       pend: 1.2.0
+
+  /fecha/4.2.3:
+    resolution: {integrity: sha512-OP2IUU6HeYKJi3i0z4A19kHMQoLVs4Hc+DPqqxI2h/DPZHTm/vjsfC6P0b4jCMy14XizLBqvndQ+UilD7707Jw==}
+    dev: false
 
   /figures/1.7.0:
     resolution: {integrity: sha512-UxKlfCRuCBxSXU4C6t9scbDyWZ4VlaFFdojKtzJuSkuOBQ5CNFum+zZXFwHjo+CxBC1t6zlYPgHIgFjL8ggoEQ==}
@@ -12662,11 +12723,9 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
 
   /tslib/2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
-    dev: true
 
   /tsutils/3.21.0_typescript@4.9.4:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

@@ -7,6 +7,7 @@ export default defineAppConfig({
     "pages/assets/profile/change-password/index",
     "pages/assets/login/index",
     "pages/assets/register/index",
+    "pages/statistics/index",
     "pages/edit-record/index"
   ],
   tabBar: {

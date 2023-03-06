@@ -35,6 +35,7 @@
   ],
   "author": "",
   "dependencies": {
+    "@antv/f2": "^4.0.41",
     "@babel/runtime": "^7.7.7",
     "@tarojs/components": "3.5.11",
     "@tarojs/helper": "3.5.11",

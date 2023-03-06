@@ -4,14 +4,13 @@
   background-color: $color-white-0;
   display: flex;
   flex-direction: column;
-  padding: 0 16Px;
   border-radius: 16Px;
   margin: 0 12Px;
 
   .header {
     display: flex;
     justify-content: space-between;
-    padding: 12Px 0;
+    padding: 12Px 16Px;
 
     .title {
       font-size: 1.2rem;
@@ -20,7 +19,9 @@
 
   }
 
-  .body {}
+  .body {
+    flex: auto;
+  }
 
   .footer {
     padding-bottom: 16Px;

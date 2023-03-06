@@ -1,10 +1,11 @@
 import MediaCard from "../../../components/MediaCard";
 import { Text, View } from "@tarojs/components";
-
-import styles from "./index.module.scss";
 import { useBillRecords } from "@/stores/useBillRecords";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
+import Taro from "@tarojs/taro";
+
+import styles from "./index.module.scss";
 
 const AnalyseMonthCard = () => {
   // TOOD: nav to statistics page
@@ -30,12 +31,17 @@ const AnalyseMonthCard = () => {
     }
     setExpenseTotal(expenseSum);
     setIncomeTotal(incomeSum);
-    console.log(expenseSum, incomeSum);
     setCountOfExpenseDots(Math.ceil(expenseSum / (incomeSum + expenseSum) * 20));
   }, [list]);
 
+  const handleClick = () => {
+    Taro.navigateTo({
+      url: "/pages/statistics/index"
+    });
+  };
+
   return (
-    <MediaCard title="本月收支">
+    <MediaCard title="本月收支" onClick={handleClick}>
       <View className={styles.container}>
         <View className={styles.main}>
           <View className={styles.col}>

@@ -1,0 +1,8 @@
+@import "@/styles/variables";
+
+.scroll-view {
+  flex-direction: column;
+  background-color: $color-gray-4;
+  display: flex;
+  height: calc(100vh - env(safe-area-inset-bottom));
+}
