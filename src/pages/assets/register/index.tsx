@@ -64,7 +64,7 @@ const RegisterPage = () => {
     } else {
       const { code } = await Taro.login();
       run({
-        username,
+        ...formData,
         code
       });
     }

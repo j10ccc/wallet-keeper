@@ -13,6 +13,8 @@ declare namespace PublicAPI {
 
   interface RegisterAPI_Data {
     username: string;
+    /** 男 女 */
+    gender: string;
     code: string;
   }
 
