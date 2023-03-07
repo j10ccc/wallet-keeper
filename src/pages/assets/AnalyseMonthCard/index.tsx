@@ -31,7 +31,7 @@ const AnalyseMonthCard = () => {
     }
     setExpenseTotal(expenseSum);
     setIncomeTotal(incomeSum);
-    setCountOfExpenseDots(Math.ceil(expenseSum / (incomeSum + expenseSum) * 20));
+    setCountOfExpenseDots(Math.ceil(expenseSum / (incomeSum + expenseSum) * 20) || 0);
   }, [list]);
 
   const handleClick = () => {

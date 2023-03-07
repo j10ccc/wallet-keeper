@@ -1,6 +1,7 @@
 import MediaCard from "@/components/MediaCard";
 import { Chart, Axis, Line, Point } from "@antv/f2";
 import { Canvas } from "@tarojs/components";
+import { memo } from "react";
 import F2 from "../../components/F2";
 
 type PropsType = {
@@ -54,4 +55,4 @@ const ExpenseSumChart = (props: PropsType) => {
 
 };
 
-export default ExpenseSumChart;
+export default memo(ExpenseSumChart);

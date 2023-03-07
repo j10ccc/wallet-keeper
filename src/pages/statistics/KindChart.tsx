@@ -2,6 +2,7 @@ import F2 from "@/components/F2";
 import MediaCard from "@/components/MediaCard";
 import { Canvas, Chart, Interval, PieLabel } from "@antv/f2";
 import { itemValueLabelMap } from "../constants/RecordItemList";
+import { memo } from "react";
 
 type PropsType = {
   data: BillAPI.BillRecord[];
@@ -22,8 +23,6 @@ const KindChart = (props: PropsType) => {
     value: tmp[item],
     type: "data"
   }));
-
-  console.log(newData);
 
   const coord = {
     transposed: true,
@@ -64,4 +63,4 @@ const KindChart = (props: PropsType) => {
   );
 };
 
-export default KindChart;
+export default memo(KindChart);

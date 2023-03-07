@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .date {
+    font-size: 1.1rem;
+  }
+
+  .arrow {
+    padding: 12Px;
+  }
+}

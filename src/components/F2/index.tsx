@@ -34,9 +34,13 @@ const F2 = (props: PropsType) => {
       });
   });
 
-  const renderChart = (config) => {
-    chartRef.current = new AntVCanvas(config);
-    chartRef.current.render();
+  const renderChart = (config: ChartProps) => {
+    if (chartRef.current) {
+      chartRef.current.update(config);
+    } else {
+      chartRef.current = new AntVCanvas(config);
+      chartRef.current.render();
+    }
   };
 
   useEffect(() => {
