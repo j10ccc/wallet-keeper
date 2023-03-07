@@ -1,41 +1,44 @@
 import useEnv from "@/hooks/useEnv";
 import { View } from "@tarojs/components";
-import Taro from "@tarojs/taro";
+import Taro, { requirePlugin } from "@tarojs/taro";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
+import { UploadVoiceWordsAPI } from "@/services/bill/UploadVoiceWords";
 
 const VoiceExtension = () => {
-  const recoderManager = useRef<Taro.RecorderManager>();
+  const recordRecoManager = useRef<any>();
   const [isRecording, setIsRecording] = useState(false);
+  const plugin = requirePlugin("WechatSI");
 
-  const recorderOptions = useRef<Taro.RecorderManager.StartOption>({
+  const recorderOptions = useRef({
     duration: 10000,
-    sampleRate: 44100,
-    numberOfChannels: 1,
-    encodeBitRate: 192000,
-    format: "aac",
-    frameSize: 50
+    lang: "zh_CN"
   });
 
   useEffect(() => {
-    recoderManager.current = Taro.getRecorderManager();
-    recoderManager.current.onStart(() => {
+    recordRecoManager.current = plugin.getRecordRecognitionManager();
+    console.log(recordRecoManager.current);
+    recordRecoManager.current!.onStart = () => {
       console.log("start");
-    });
-    recoderManager.current.onStop((res) => {
-      uploadRecord(res.tempFilePath);
-    });
+    };
+    recordRecoManager.current!.onStop = (res) => {
+      console.log(res.result);
+      UploadVoiceWordsAPI({ sentence: res.result })
+        .then(res => {
+          console.log(res);
+        });
+    };
   }, []);
 
   const handleRecordStart = () => {
     setIsRecording(true);
-    recoderManager.current?.start(recorderOptions.current);
+    recordRecoManager.current!.start(recorderOptions.current);
   };
 
   const handleRecordStop = () => {
     setIsRecording(false);
-    recoderManager.current?.stop();
+    recordRecoManager.current!.stop();
   };
 
   const uploadRecord = (path: string) => {

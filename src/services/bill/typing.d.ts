@@ -23,13 +23,16 @@ declare namespace BillAPI {
 
   interface UploadPhoto_Result extends Common.IResponse<Partial<BillRecord>> {}
 
-  interface InsertItem_Data extends Omit<BillRecord, "id" | "type"> {
+  interface InsertItem_Data extends Omit<BillRecord, "id" | "type" | "value"> {
+    value: string;
     type: boolean
   }
 
   interface InsertItem_Result extends Common.IResponse<number> {}
 
-  interface UpdateItem_Data extends BillRecord {}
+  interface UpdateItem_Data extends Omit<BillRecord, "value">{
+    value: string;
+  }
 
   interface UpdateItem_Result extends Common.IResponse<number> {}
 
@@ -53,5 +56,13 @@ declare namespace BillAPI {
   interface FetchItems_Result extends Common.IResponse<{
     // TODO:
   }> {}
+
+  interface UploadVoiceWords_Data {
+    sentence: string;
+  }
+
+  interface UploadVoiceWords_Result extends Common.IResponse<
+    Partial<BillRecord>
+  > {}
 
 }
