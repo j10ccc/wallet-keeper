@@ -47,12 +47,16 @@ const StatisticsPage = () => {
       <DateSelectorBar initialValue={date} onSelect={handleDateSelect} />
       <ScrollView scrollY className={styles["scroll-view"]}>
         <View className={styles.container}>
-          <ExpenseSumChart
-            data={monthlyData}
-            month={date.month}
-            year={date.year}
-          />
-          <KindChart data={monthlyData} />
+          { monthlyData.length ?
+            <>
+              <ExpenseSumChart
+                data={monthlyData}
+                month={date.month}
+                year={date.year}
+              />
+              <KindChart data={monthlyData} />
+            </> : null
+          }
         </View>
       </ScrollView>
     </PageView>

@@ -16,7 +16,7 @@ const DateSelectorBar = (props: PropsType) => {
   const { onSelect, initialValue } = props;
 
   const [date, setDate] = useState(
-    dayjs(new Date(initialValue.year, initialValue.month))
+    dayjs(new Date(initialValue.year, initialValue.month - 1))
       .format("YYYY-MM-DD")
   );
 

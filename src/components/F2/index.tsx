@@ -1,5 +1,5 @@
 import { Canvas } from "@tarojs/components";
-import Taro, { useReady } from "@tarojs/taro";
+import Taro from "@tarojs/taro";
 import { useState, useEffect, useRef } from "react";
 import { Canvas as AntVCanvas } from "@antv/f2";
 import { ChartProps } from "@antv/f2/es/canvas";
@@ -15,9 +15,15 @@ const F2 = (props: PropsType) => {
   const [isReady, setIsReady] = useState(false);
   const { children, chartId } = props;
 
-  useReady(() => {
+  useEffect(() => {
+    setTimeout(() => {
+      getCanvasContext();
+    }, 200);
+  }, []);
+
+  const getCanvasContext = () => {
     const query = Taro.createSelectorQuery();
-    query.select(`#${chartId}`)
+    const res = query.select(`#${chartId}`)
       .fields({node: true, size: true})
       .exec((res) => {
         const { node, width, height } = res[0];
@@ -32,7 +38,8 @@ const F2 = (props: PropsType) => {
         };
         setIsReady(true);
       });
-  });
+    return res ? true : false;
+  };
 
   const renderChart = (config: ChartProps) => {
     if (chartRef.current) {
