@@ -8,6 +8,10 @@ declare namespace BillAPI {
     kind: string; // meals
   }
 
+  interface DraftType extends Omit<BillRecord, "uid"> {
+    uid?: string;
+  }
+
   interface DateIndex {
     /** YYYY-MM */
     date: string;
@@ -18,25 +22,32 @@ declare namespace BillAPI {
 
   interface UploadPhoto_Data {
     filePath: string;
-    type?: "default" | "train"
+    type?: "default" | "train";
   }
 
-  interface UploadPhoto_Result extends Common.IResponse<Partial<BillRecord>> {}
+  interface UploadPhoto_Result
+    extends Common.IResponse<
+      Partial<Omit<DraftType, "value">> & {
+        value: string;
+      }
+    > {}
 
   interface InsertItem_Data extends Omit<BillRecord, "id" | "type" | "value"> {
     value: string;
-    type: boolean
+    type: boolean;
   }
 
   interface InsertItem_Result extends Common.IResponse<number> {}
 
-  interface UpdateItem_Data extends Omit<BillRecord, "value">{
+  interface UpdateItem_Data extends Omit<BillRecord, "value"> {
     value: string;
   }
 
   interface UpdateItem_Result extends Common.IResponse<number> {}
 
-  interface DeleteItem_Data { id: string; }
+  interface DeleteItem_Data {
+    id: string;
+  }
 
   interface DeleteItem_Result extends Common.IResponse<null> {}
 
@@ -53,16 +64,22 @@ declare namespace BillAPI {
     page_size: number;
   }
 
-  interface FetchItems_Result extends Common.IResponse<{
-    // TODO:
-  }> {}
+  interface FetchItems_Result
+    extends Common.IResponse<{
+      // TODO:
+    }> {}
 
   interface UploadVoiceWords_Data {
     sentence: string;
   }
 
-  interface UploadVoiceWords_Result extends Common.IResponse<
-    Partial<BillRecord>
-  > {}
-
+  interface UploadVoiceWords_Result
+    extends Common.IResponse<
+      Partial<{
+        date: string;
+        remark: string;
+        type: boolean;
+        value: string;
+      }>
+    > {}
 }

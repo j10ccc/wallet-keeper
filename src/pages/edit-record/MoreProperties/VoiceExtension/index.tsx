@@ -1,15 +1,23 @@
-import useEnv from "@/hooks/useEnv";
 import { View } from "@tarojs/components";
-import Taro, { requirePlugin } from "@tarojs/taro";
+import { requirePlugin } from "@tarojs/taro";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import { UploadVoiceWordsAPI } from "@/services/bill/UploadVoiceWords";
+import { useEditDraft } from "@/stores/useEditDraft";
+import dayjs from "dayjs";
 
-const VoiceExtension = () => {
+type PropsType = {
+  originValue: React.RefObject<BillAPI.DraftType>
+}
+
+const VoiceExtension = (props: PropsType) => {
   const recordRecoManager = useRef<any>();
   const [isRecording, setIsRecording] = useState(false);
   const plugin = requirePlugin("WechatSI");
+  const { setDraft } = useEditDraft();
+
+  const originValue = props.originValue.current;
 
   const recorderOptions = useRef({
     duration: 10000,
@@ -24,9 +32,21 @@ const VoiceExtension = () => {
     };
     recordRecoManager.current!.onStop = (res) => {
       console.log(res.result);
-      UploadVoiceWordsAPI({ sentence: res.result })
+      UploadVoiceWordsAPI({ sentence: res.result || "昨天三餐花了10元" })
         .then(res => {
-          console.log(res);
+          console.log("res:", res.data.data);
+          const {
+            date = originValue!.date,
+            value = originValue!.value.toString(),
+            type = originValue!.type === "expense" ? true : false,
+            // TODO: remark
+          } = res.data.data;
+          setDraft({
+            date: dayjs(date).format("YYYY-MM-DD"),
+            type: type ? "expense" : "income",
+            value: parseFloat(value),
+            kind: originValue!.kind,
+          });
         });
     };
   }, []);
@@ -39,17 +59,6 @@ const VoiceExtension = () => {
   const handleRecordStop = () => {
     setIsRecording(false);
     recordRecoManager.current!.stop();
-  };
-
-  const uploadRecord = (path: string) => {
-    Taro.uploadFile({
-      url: useEnv().baseUrl,
-      filePath: path,
-      name: "voice",
-      success: (res) => {
-        console.log(res);
-      }
-    });
   };
 
   return (

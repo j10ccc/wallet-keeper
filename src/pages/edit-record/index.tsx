@@ -1,6 +1,6 @@
 import { useEditDraft } from "@/stores/useEditDraft";
 import { View, Text } from "@tarojs/components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NumberKeyboard from "@/components/NumberKeyboard";
 import Taro, { useRouter } from "@tarojs/taro";
 import KindSelector from "@/components/KindSelector";
@@ -15,8 +15,7 @@ const evalExpOfTwo = (content: string): number => {
   let res = 0;
   let index = -1;
   content.split("").forEach((item, i) => {
-    if (item === "+" || item === "-")
-      index = i;
+    if (item === "+" || item === "-") index = i;
   });
 
   if (index === -1) return parseFloat(content);
@@ -29,26 +28,38 @@ const evalExpOfTwo = (content: string): number => {
   return Math.floor(res * 100 + 0.5) / 100;
 };
 
-export type DraftType = Omit<BillAPI.BillRecord, "uid"> & { uid?: string };
-
 const EditRecordPage = () => {
-  // TODO: loading cache
-  let defaultValue: DraftType;
-  const mode = useRouter().params.mode;
-  if (mode === "update")
-    defaultValue = useEditDraft(state => state.record!);
-  else defaultValue = {
-    date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
-    value: 0,
-    kind: expenseItemList[0].value,
-    type: "expense",
-  };
+  const { record: recordInStore } = useEditDraft();
 
-  const recordRef = useRef<DraftType>(defaultValue);
-  const [content, setContent] = useState(recordRef.current?.value.toString() || "0.00");
+  // TODO: loading cache
+  let defaultValue: BillAPI.DraftType;
+  const mode = useRouter().params.mode;
+  if (mode === "update") defaultValue = recordInStore!;
+  else
+    defaultValue = {
+      date: `${new Date().getFullYear()}-${
+        new Date().getMonth() + 1
+      }-${new Date().getDate()}`,
+      value: 0,
+      kind: expenseItemList[0].value,
+      type: "expense",
+    };
+
+  useEffect(() => {
+    setContent((recordInStore?.value || 0).toFixed(2));
+    recordRef.current = {
+      ...recordRef.current,
+      ...recordInStore,
+    };
+  }, [recordInStore]);
+
+  const recordRef = useRef<BillAPI.DraftType>(defaultValue);
+  const [content, setContent] = useState(
+    recordRef.current?.value?.toString() || "0.00"
+  );
 
   const { updateItem, addItem } = useBillRecords();
-  const resetDraft = useEditDraft(state => state.reset);
+  const resetDraft = useEditDraft((state) => state.reset);
 
   /**
    * 结算
@@ -59,13 +70,10 @@ const EditRecordPage = () => {
     if (mode === "create") {
       addItem({
         uid: useGuid().guid,
-        ...recordRef.current
+        ...recordRef.current,
       });
     } else if (mode === "update") {
-      updateItem(
-        recordRef.current!.uid!,
-        omit(recordRef.current!, ["uid"])
-      );
+      updateItem(recordRef.current!.uid!, omit(recordRef.current!, ["uid"]));
     }
 
     setContent("0");
@@ -75,13 +83,12 @@ const EditRecordPage = () => {
 
   const onDelete = () => {
     if (content.length === 1) setContent("0");
-    else setContent(value => value.slice(0, value.length - 1));
+    else setContent((value) => value.slice(0, value.length - 1));
   };
 
   const onReset = () => {
     setContent("0");
     // TODO: submit but not close
-
   };
 
   const onInput = (key: string) => {
@@ -90,30 +97,33 @@ const EditRecordPage = () => {
       // .
       if (currentNum.includes(".")) return;
       // else setContent(content => `${content}${currentNum === "0" ? "0." : key}`);
-      else setContent(content => content + key);
+      else setContent((content) => content + key);
     } else if (key === "+" || key === "-") {
       // + -
       if (content === "0" || content === "0.00") return;
       if (content.endsWith("+"))
-        setContent(content => content.slice(0, content.length - 1) + "-");
+        setContent((content) => content.slice(0, content.length - 1) + "-");
       else if (content.endsWith("-"))
-        setContent(content => content.slice(0, content.length - 1) + "+");
+        setContent((content) => content.slice(0, content.length - 1) + "+");
       else {
         const res = evalExpOfTwo(content);
-        setContent(()=> res.toString()+ key);
+        setContent(() => res.toString() + key);
       }
     } else {
       // 1 2 3
       if (content === "0" || content === "0.00") setContent(key);
       else if (currentNum.includes(".") && currentNum.split(".")[1].length == 2)
-        Taro.showToast({title: "最多2位小数", icon:"none"});
-      else if (!currentNum.includes(".") && currentNum.split(".")[0].length === 8)
-        Taro.showToast({title: "最多8位整数", icon:"none"});
-      else setContent(content => content + key);
+        Taro.showToast({ title: "最多2位小数", icon: "none" });
+      else if (
+        !currentNum.includes(".") &&
+        currentNum.split(".")[0].length === 8
+      )
+        Taro.showToast({ title: "最多8位整数", icon: "none" });
+      else setContent((content) => content + key);
     }
   };
 
-  const handleSelectKind = (e: { kind: string, type: string }) => {
+  const handleSelectKind = (e: { kind: string; type: string }) => {
     if (recordRef.current) {
       // FIXME:
       recordRef.current.type = e.type;
@@ -127,13 +137,13 @@ const EditRecordPage = () => {
         onSelect={handleSelectKind}
         defaultValue={{
           kind: recordRef.current?.kind,
-          type: recordRef.current?.type
+          type: recordRef.current?.type,
         }}
       />
       <View className={styles.sum}>
-        <Text className={styles.content}>{ content }</Text>
+        <Text className={styles.content}>{content}</Text>
       </View>
-      <MoreProperties record={recordRef}/>
+      <MoreProperties record={recordRef} />
       <NumberKeyboard
         onConfirm={onConfirm}
         onDelete={onDelete}
