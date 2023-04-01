@@ -32,15 +32,17 @@ declare namespace BillAPI {
       }
     > {}
 
-  interface InsertItem_Data extends Omit<BillRecord, "id" | "type" | "value"> {
+  interface InsertItem_Data
+    extends Omit<BillRecord, "id" | "type" | "value" | "uid"> {
     value: string;
     type: boolean;
   }
 
   interface InsertItem_Result extends Common.IResponse<number> {}
 
-  interface UpdateItem_Data extends Omit<BillRecord, "value"> {
+  interface UpdateItem_Data extends Omit<BillRecord, "value" | "type" | "uid"> {
     value: string;
+    type: boolean;
   }
 
   interface UpdateItem_Result extends Common.IResponse<number> {}
