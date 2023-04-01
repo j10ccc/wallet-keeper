@@ -18,33 +18,17 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "resolveJsonModule": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "paths": {
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/stores/*": [
-        "./src/stores/*"
-      ],
-      "@/pages/*": [
-        "./src/pages/*"
-      ],
-      "@/hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@/services/*": [
-        "./src/services/*"
-      ],
-      "@/styles/*": [
-        "./src/styles/*"
-      ],
+      "@/components/*": ["./src/components/*"],
+      "@/stores/*": ["./src/stores/*"],
+      "@/constants/*": ["./src/pages/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/styles/*": ["./src/styles/*"]
     }
   },
-  "include": [
-    "./src",
-    "./types"
-  ],
+  "include": ["./src", "./types"],
   "compileOnSave": false
 }

@@ -8,8 +8,10 @@ import styles from "./index.module.scss";
 import MoreProperties from "./MoreProperties";
 import { useBillRecords } from "@/stores/useBillRecords";
 import { omit } from "lodash-es";
-import { expenseItemList } from "../constants/RecordItemList";
+import { expenseItemList } from "@/constants/RecordItemList";
 import { useGuid } from "@/hooks/useGuid";
+import { InsertItemAPI } from "@/services/bill/InsertItemAPI";
+import { UpdateItemAPI } from "@/services/bill/UpdateItemAPI";
 
 const evalExpOfTwo = (content: string): number => {
   let res = 0;
@@ -64,7 +66,7 @@ const EditRecordPage = () => {
   /**
    * 结算
    */
-  const onConfirm = () => {
+  const onConfirm = async () => {
     const res = evalExpOfTwo(content);
     if (recordRef.current) recordRef.current.value = res;
     if (mode === "create") {
@@ -72,8 +74,28 @@ const EditRecordPage = () => {
         uid: useGuid().guid,
         ...recordRef.current,
       });
+      try {
+        const res = await InsertItemAPI({
+          ...recordRef.current,
+          value: recordRef.current.value.toFixed(2),
+          type: recordRef.current.type === "expense" ? true : false,
+        });
+        console.log("insert result:", res);
+      } catch (e) {
+        console.log(e);
+      }
     } else if (mode === "update") {
       updateItem(recordRef.current!.uid!, omit(recordRef.current!, ["uid"]));
+      try {
+        const res = await UpdateItemAPI({
+          ...recordRef.current,
+          value: recordRef.current.value.toFixed(2),
+          type: recordRef.current.type === "expense" ? true : false,
+        });
+        console.log("update result:", res);
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     setContent("0");
