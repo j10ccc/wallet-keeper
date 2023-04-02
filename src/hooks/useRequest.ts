@@ -8,13 +8,18 @@ interface RequestConfigType<TData extends TaroGeneral.IAnyObject, TParams> {
   manual?: boolean;
   defaultParams?: TParams;
   onBefore?: () => void;
-  onSuccess?: (response: Taro.request.SuccessCallbackResult<TData>) => void;
+  onSuccess?: (
+    response: Taro.request.SuccessCallbackResult<TData>,
+    params: TParams | undefined
+  ) => void;
   onError?: (error: Error) => void;
   onFinally?: () => void;
 }
 
 const useRequest = <TData extends TaroGeneral.IAnyObject, TParams>(
-  service: (params?: TParams) => Promise<Taro.request.SuccessCallbackResult<TData>>,
+  service: (
+    params?: TParams
+  ) => Promise<Taro.request.SuccessCallbackResult<TData>>,
   config?: RequestConfigType<TData, TParams>
 ) => {
   const [loading, setLoading] = useState(false);
@@ -24,15 +29,17 @@ const useRequest = <TData extends TaroGeneral.IAnyObject, TParams>(
   const fetch = (params?: TParams) => {
     config?.onBefore?.();
     setLoading(true);
-    service(params || config?.defaultParams).then((response) => {
-      config?.onSuccess?.(response);
-      setData(response.data);
-      setLoading(false);
-    }).catch((error) => {
-      config?.onError?.(error);
-      setError(error);
-      setLoading(false);
-    });
+    service(params || config?.defaultParams)
+      .then((response) => {
+        config?.onSuccess?.(response, params);
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        config?.onError?.(error);
+        setError(error);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -46,7 +53,7 @@ const useRequest = <TData extends TaroGeneral.IAnyObject, TParams>(
     data,
     error,
     run: fetch,
-    runAsync: service
+    runAsync: service,
   };
 };
 

@@ -8,26 +8,28 @@ export default defineAppConfig({
     "pages/assets/login/index",
     "pages/assets/register/index",
     "pages/statistics/index",
-    "pages/edit-record/index"
+    "pages/edit-record/index",
+    "pages/ledger-manager/index",
+    "pages/ledger-manager/create/index",
   ],
   tabBar: {
     custom: true,
     list: [
-      { pagePath: "pages/index/index", text: "账单"},
-      { pagePath: "pages/input/index", text: "记一笔"},
-      { pagePath: "pages/assets/index", text: "资产"},
-    ]
+      { pagePath: "pages/index/index", text: "账单" },
+      { pagePath: "pages/input/index", text: "记一笔" },
+      { pagePath: "pages/assets/index", text: "资产" },
+    ],
   },
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",
     navigationBarTitleText: "WeChat",
-    navigationBarTextStyle: "black"
+    navigationBarTextStyle: "black",
   },
   plugins: {
-    "WechatSI": {
-      "version": "0.3.5",
-      "provider": "wx069ba97219f66d99"
-    }
-  }
+    WechatSI: {
+      version: "0.3.5",
+      provider: "wx069ba97219f66d99",
+    },
+  },
 });

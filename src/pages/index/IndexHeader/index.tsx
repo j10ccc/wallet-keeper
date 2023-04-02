@@ -6,12 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import { useQueryBills } from "@/stores/useQueryBills";
 import dayjs from "dayjs";
 import { useBillRecords } from "@/stores/useBillRecords";
+import { useLedger } from "@/stores/useLedger";
+import Taro from "@tarojs/taro";
 
 const TypeSelector = () => {
   const range = useRef({
-    "default": "全部",
-    "income": "收入",
-    "expense": "支出"
+    default: "全部",
+    income: "收入",
+    expense: "支出",
   });
 
   const { type, setType } = useQueryBills();
@@ -26,10 +28,7 @@ const TypeSelector = () => {
       range={Object.values(range.current)}
       onChange={handleSelect}
     >
-      <View className={classNames(
-        styles["type-selector"],
-        styles["selector"]
-      )}>
+      <View className={classNames(styles["type-selector"], styles["selector"])}>
         <Text>{range.current[type]}</Text>
       </View>
     </Picker>
@@ -40,7 +39,9 @@ const DateSelector = () => {
   const { date, setDate } = useQueryBills();
 
   const handleSelect = (e: CommonEvent) => {
-    const [year, month] = e.detail.value.split("-").map(item => parseInt(item));
+    const [year, month] = e.detail.value
+      .split("-")
+      .map((item) => parseInt(item));
     setDate(year, month);
   };
 
@@ -49,16 +50,44 @@ const DateSelector = () => {
       mode="date"
       onChange={handleSelect}
       fields="month"
-      value={`${dayjs(new Date(date.year, date.month - 1)).format("YYYY-MM-DD")}`}
+      value={`${dayjs(new Date(date.year, date.month - 1)).format(
+        "YYYY-MM-DD"
+      )}`}
     >
-      <View className={classNames(
-        styles["date-selector"],
-        styles["selector"]
-      )}>
+      <View className={classNames(styles["date-selector"], styles["selector"])}>
         <Text>{`${date.year}年 ${date.month}月 `}</Text>
         <AtIcon value="chevron-down" size="16" color="#ffffff99" />
       </View>
     </Picker>
+  );
+};
+
+const LedgerSelector = () => {
+  const { ledgerID } = useQueryBills();
+  const { list: ledgers } = useLedger();
+
+  const [ledgerName, setledgerName] = useState(() => {
+    if (ledgerID === undefined) return "点击获取账本";
+    else return ledgers[0].name;
+  });
+
+  useEffect(() => {
+    if (ledgerID === undefined) return;
+    setledgerName(
+      ledgers.find((item) => item.id === ledgerID)?.name || "未知账本"
+    );
+  }, [ledgers, ledgerID]);
+
+  const handleClick = () => {
+    Taro.navigateTo({
+      url: "/pages/ledger-manager/index",
+    });
+  };
+
+  return (
+    <View className={styles["ledger-name"]} onClick={handleClick}>
+      <Text>{ledgerName}</Text>
+    </View>
   );
 };
 
@@ -74,17 +103,21 @@ const StatisticText = () => {
     let expense = 0;
 
     income = list
-      .filter(item =>
-        item.date.startsWith(`${date.year}-${date.month}-`) &&
-        item.type === "income")
-      .map(item => item.value)
+      .filter(
+        (item) =>
+          item.date.startsWith(`${date.year}-${date.month}-`) &&
+          item.type === "income"
+      )
+      .map((item) => item.value)
       .reduce((prev, curr) => prev + curr, 0);
 
     expense = list
-      .filter(item =>
-        item.date.startsWith(`${date.year}-${date.month}-`) &&
-        item.type === "expense")
-      .map(item => item.value)
+      .filter(
+        (item) =>
+          item.date.startsWith(`${date.year}-${date.month}-`) &&
+          item.type === "expense"
+      )
+      .map((item) => item.value)
       .reduce((prev, curr) => prev + curr, 0);
 
     income = Math.floor(income * 100 + 0.5) / 100;
@@ -98,26 +131,30 @@ const StatisticText = () => {
   }, [date, list]);
 
   return (
-    <>
-      {(type === "default" || type === "expense") &&
-        <Text>{`总支出¥ ${expenseTotal}`}</Text>}
-      {(type === "default" || type === "income") &&
-        <Text>{`总收入¥ ${incomeTotal}`}</Text>}
-    </>
+    <View className={styles["statistic-text"]}>
+      {(type === "default" || type === "expense") && (
+        <Text>{`总支出¥ ${expenseTotal}`}</Text>
+      )}
+      {(type === "default" || type === "income") && (
+        <Text>{`总收入¥ ${incomeTotal}`}</Text>
+      )}
+    </View>
   );
-
 };
 
 const IndexHeader = () => {
-  return <View className={styles.container}>
-    <View className={styles["selectors"]}>
-      <DateSelector />
-      <TypeSelector />
+  return (
+    <View className={styles.container}>
+      <View className={styles["selectors"]}>
+        <DateSelector />
+        <TypeSelector />
+      </View>
+      <View className={styles["detail"]}>
+        <StatisticText />
+        <LedgerSelector />
+      </View>
     </View>
-    <View className={styles["detail"]}>
-      <StatisticText />
-    </View>
-  </View>;
+  );
 };
 
 export default IndexHeader;

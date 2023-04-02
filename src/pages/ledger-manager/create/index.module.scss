@@ -1,0 +1,58 @@
+@import "@/styles/variables.scss";
+
+.actions {
+  position: absolute;
+  bottom: 0;
+  background-color: 24rpx;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 24rpx;
+  border-top: 2rpx solid $color-gray-3;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 24rpx 0 0 24rpx;
+  color: $color-gray-1;
+}
+
+.templates {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  padding: 12rpx;
+
+  .card {
+    position: relative;
+    background-color: $color-white-1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12rpx;
+    height: 140rpx;
+    border-radius: 16rpx;
+    transition: all 0.2s;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    .name {
+      // color: $color-black-4;
+      color: $color-white-1;
+      font-weight: 600;
+      z-index: 2;
+    }
+
+    .icon {
+      opacity: 0.35;
+      position: absolute;
+      right: 8rpx;
+      top: 28rpx;
+      color: $color-white-1;
+      z-index: 1;
+    }
+  }
+  .selected {
+    border: 6rpx solid $color-brand;
+    box-shadow: 0 0 0 4rpx rgba($color-brand, 0.5);
+  }
+}

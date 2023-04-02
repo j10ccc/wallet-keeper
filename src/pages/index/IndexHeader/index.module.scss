@@ -6,10 +6,6 @@
   display: flex;
   flex-direction: column;
 
-  :global(text) {
-    color: $color-white-1;
-  }
-
   .selectors {
     display: flex;
     gap: 16rpx;
@@ -17,11 +13,12 @@
 
     .selector {
       padding: 12rpx;
-      transition: all .2s;
+      transition: all 0.2s;
       border-radius: 12rpx;
     }
 
     .type-selector {
+      color: $color-white-1;
       background-color: rgb(255, 255, 255, 0.1);
       padding-left: 24rpx;
       padding-right: 24rpx;
@@ -33,6 +30,7 @@
 
     .date-selector {
       font-size: 1.2em;
+      color: $color-white-1;
     }
 
     .date-selector:active {
@@ -42,10 +40,27 @@
 
   .detail {
     display: flex;
-    gap: 16rpx;
     align-items: baseline;
     padding: 0 24rpx;
     margin-top: 16rpx;
-  }
+    justify-content: space-between;
+    color: $color-white-1;
 
+    .statistic-text {
+      display: flex;
+      gap: 16rpx;
+    }
+
+    .ledger-name {
+      background-color: #fff;
+      color: $color-green-6;
+      padding: 12rpx 32rpx;
+      border-radius: 100rpx;
+      transition: all 0.2s;
+
+      &:active {
+        filter: brightness(90%);
+      }
+    }
+  }
 }

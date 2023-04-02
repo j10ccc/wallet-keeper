@@ -1,17 +1,49 @@
 @font-face {
   font-family: "iconfont";
   /* Project id 3856634 */
-  src: url('../assets/fonts/iconfont.woff2?t=1673249391367') format('woff2'),
-    url('../assets/fonts/iconfont.woff?t=1673249391367') format('woff'),
-    url('../assets/fonts/iconfont.ttf?t=1673249391367') format('truetype');
+  src: url("../assets/fonts/iconfont.woff2?t=1673249391367") format("woff2"),
+    url("../assets/fonts/iconfont.woff?t=1673249391367") format("woff"),
+    url("../assets/fonts/iconfont.ttf?t=1673249391367") format("truetype");
 }
 
 .icon {
   font-family: "iconfont" !important;
-  font-size: 16Px;
+  font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-more:before {
+  content: "\e605";
+}
+
+.icon-ledger-baby:before {
+  content: "\e602";
+}
+
+.icon-ledger-favor:before {
+  content: "\e604";
+}
+
+.icon-ledger-love:before {
+  content: "\e654";
+}
+
+.icon-ledger-invest:before {
+  content: "\e694";
+}
+
+.icon-ok:before {
+  content: "\e613";
+}
+
+.icon-ledger-fitment:before {
+  content: "\e675";
+}
+
+.icon-ledger-business:before {
+  content: "\e6c4";
 }
 
 .icon-alimony:before {
