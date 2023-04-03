@@ -1,0 +1,10 @@
+@import "@/styles/variables.scss";
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-left: 4rpx solid $color-brand;
+  margin: 24rpx;
+  padding-left: 24rpx;
+  color: $color-text-2;
+}
