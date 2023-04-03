@@ -1,0 +1,14 @@
+@import "@/styles/variables.scss";
+
+.confirm {
+  text {
+    color: $color-brand;
+  }
+}
+
+.options {
+  flex: auto;
+  background-color: $color-white-1;
+  overflow-y: auto;
+  padding-bottom: 48rpx;
+}

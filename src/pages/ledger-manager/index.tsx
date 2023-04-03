@@ -21,7 +21,10 @@ const LedgerCard = (props: { name: string; id: number; selected: boolean }) => {
   };
 
   const handleEdit = (e) => {
-    console.log(e.stopPropagation());
+    e.stopPropagation();
+    Taro.navigateTo({
+      url: `update/index?id=${props.id}`,
+    });
   };
 
   return (
@@ -41,9 +44,9 @@ const LedgerCard = (props: { name: string; id: number; selected: boolean }) => {
 
 const LedgerManagerPage = () => {
   const { ledgerID } = useQueryBills();
-  const { overwrite } = useLedger();
+  const { overwrite, list: ledgers } = useLedger();
 
-  const getLedgers = useRequest(LedgerService.FetchItemsAPI, {
+  useRequest(LedgerService.FetchItemsAPI, {
     onSuccess: (response) => {
       if (response.data.code === 200) {
         overwrite(
@@ -76,7 +79,7 @@ const LedgerManagerPage = () => {
     <PageView>
       <ScrollView style={{ flex: "auto", backgroundColor: "#f0f0f0" }}>
         <View className={styles["ledgers-grid"]}>
-          {getLedgers.data?.data.map((item) => (
+          {ledgers.map((item) => (
             <LedgerCard
               key={item.id}
               name={item.name}

@@ -26,4 +26,10 @@ declare namespace LedgerAPI {
   }
 
   interface DeleteItem_Result extends Common.IResponse<null> {}
+
+  interface FetchShareCode_Data {
+    ledger_id: number;
+  }
+
+  interface FetchShareCode_Result extends Common.IResponse<string> {}
 }

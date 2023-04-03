@@ -11,6 +11,7 @@ export default defineAppConfig({
     "pages/edit-record/index",
     "pages/ledger-manager/index",
     "pages/ledger-manager/create/index",
+    "pages/ledger-manager/update/index",
   ],
   tabBar: {
     custom: true,
