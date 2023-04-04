@@ -14,6 +14,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-list:before {
+  content: "\e630";
+}
+
+.icon-card:before {
+  content: "\e693";
+}
+
+.icon-edit:before {
+  content: "\e6aa";
+}
+
+.icon-add:before {
+  content: "\e6df";
+}
+
 .icon-more:before {
   content: "\e605";
 }

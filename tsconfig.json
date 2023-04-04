@@ -22,7 +22,7 @@
     "paths": {
       "@/components/*": ["./src/components/*"],
       "@/stores/*": ["./src/stores/*"],
-      "@/constants/*": ["./src/pages/*"],
+      "@/constants/*": ["./src/constants/*"],
       "@/pages/*": ["./src/pages/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/services/*": ["./src/services/*"],
