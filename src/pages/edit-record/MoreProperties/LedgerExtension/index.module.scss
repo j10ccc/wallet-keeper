@@ -1,0 +1,16 @@
+@import "@/styles/variables";
+
+.extension {
+  background-color: rgba($color-green-5, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.1s;
+
+  .label {
+    color: $color-green-5;
+  }
+}
+
+.extension:active {
+  filter: brightness(90%);
+}

@@ -12,6 +12,7 @@ import { expenseItemList } from "@/constants/RecordItemList";
 import { useGuid } from "@/hooks/useGuid";
 import { InsertItemAPI } from "@/services/bill/InsertItemAPI";
 import { UpdateItemAPI } from "@/services/bill/UpdateItemAPI";
+import { useLedger } from "@/stores/useLedger";
 
 const evalExpOfTwo = (content: string): number => {
   let res = 0;
@@ -32,10 +33,13 @@ const evalExpOfTwo = (content: string): number => {
 
 const EditRecordPage = () => {
   const { record: recordInStore } = useEditDraft();
+  const ledgers = useLedger((store) => store.list);
 
   // TODO: loading cache
   let defaultValue: BillAPI.DraftType;
-  const mode = useRouter().params.mode;
+  const { mode, ledgerID } = useRouter().params;
+  console.log("page render");
+
   if (mode === "update") defaultValue = recordInStore!;
   else
     defaultValue = {
@@ -45,6 +49,7 @@ const EditRecordPage = () => {
       value: 0,
       kind: expenseItemList[0].value,
       type: "expense",
+      ledgerID: ledgerID ? parseInt(ledgerID) : ledgers[0]?.id,
     };
 
   useEffect(() => {
@@ -70,19 +75,24 @@ const EditRecordPage = () => {
     const res = evalExpOfTwo(content);
     if (recordRef.current) recordRef.current.value = res;
     if (mode === "create") {
-      addItem({
-        uid: useGuid().guid,
-        ...recordRef.current,
-      });
+      let id: number | undefined = undefined;
       try {
         const res = await InsertItemAPI({
-          ...recordRef.current,
+          ...omit(recordRef.current, ["ledgerID"]),
           value: recordRef.current.value.toFixed(2),
           type: recordRef.current.type === "expense" ? true : false,
+          ledger_id: recordRef.current.ledgerID,
         });
         console.log("insert result:", res);
+        id = res.data.data;
       } catch (e) {
         console.log(e);
+      } finally {
+        addItem({
+          id,
+          uid: useGuid().guid,
+          ...recordRef.current,
+        });
       }
     } else if (mode === "update") {
       updateItem(recordRef.current!.uid!, omit(recordRef.current!, ["uid"]));

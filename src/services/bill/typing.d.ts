@@ -6,6 +6,7 @@ declare namespace BillAPI {
     type: string; // income | expense
     value: number; // 13.89
     kind: string; // meals
+    ledgerID: number;
   }
 
   interface DraftType extends Omit<BillRecord, "uid"> {
@@ -33,9 +34,10 @@ declare namespace BillAPI {
     > {}
 
   interface InsertItem_Data
-    extends Omit<BillRecord, "id" | "type" | "value" | "uid"> {
+    extends Omit<BillRecord, "id" | "type" | "value" | "uid" | "ledgerID"> {
     value: string;
     type: boolean;
+    ledger_id: number;
   }
 
   interface InsertItem_Result extends Common.IResponse<number> {}

@@ -2,11 +2,16 @@ import { Text, View } from "@tarojs/components";
 import styles from "./index.module.scss";
 import { AtIcon } from "taro-ui";
 import Taro from "@tarojs/taro";
+import { useQueryBills } from "@/stores/useQueryBills";
 
 const CreateRecordBubble = () => {
+  const { ledgerID } = useQueryBills();
+
   const onClick = () => {
     Taro.navigateTo({
-      url: "/pages/edit-record/index?mode=create"
+      url: `/pages/edit-record/index?mode=create${
+        ledgerID ? `&ledgerID=${ledgerID}` : ""
+      }`,
     });
   };
 

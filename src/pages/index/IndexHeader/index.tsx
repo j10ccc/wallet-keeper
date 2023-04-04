@@ -67,6 +67,7 @@ const LedgerSelector = () => {
   const { list: ledgers } = useLedger();
 
   const [ledgerName, setledgerName] = useState(() => {
+    // TODO: 默认账本
     if (ledgerID === undefined) return "点击获取账本";
     else return ledgers[0].name;
   });

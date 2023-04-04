@@ -8,8 +8,8 @@ import { useEditDraft } from "@/stores/useEditDraft";
 import dayjs from "dayjs";
 
 type PropsType = {
-  originValue: React.RefObject<BillAPI.DraftType>
-}
+  originValue: React.RefObject<BillAPI.DraftType>;
+};
 
 const VoiceExtension = (props: PropsType) => {
   const recordRecoManager = useRef<any>();
@@ -21,7 +21,7 @@ const VoiceExtension = (props: PropsType) => {
 
   const recorderOptions = useRef({
     duration: 10000,
-    lang: "zh_CN"
+    lang: "zh_CN",
   });
 
   useEffect(() => {
@@ -32,8 +32,8 @@ const VoiceExtension = (props: PropsType) => {
     };
     recordRecoManager.current!.onStop = (res) => {
       console.log(res.result);
-      UploadVoiceWordsAPI({ sentence: res.result || "昨天三餐花了10元" })
-        .then(res => {
+      UploadVoiceWordsAPI({ sentence: res.result || "昨天三餐花了10元" }).then(
+        (res) => {
           console.log("res:", res.data.data);
           const {
             date = originValue!.date,
@@ -46,8 +46,10 @@ const VoiceExtension = (props: PropsType) => {
             type: type ? "expense" : "income",
             value: parseFloat(value),
             kind: originValue!.kind,
+            ledgerID: originValue!.ledgerID,
           });
-        });
+        }
+      );
     };
   }, []);
 
@@ -62,17 +64,17 @@ const VoiceExtension = (props: PropsType) => {
   };
 
   return (
-    <View className={
-      classNames([
+    <View
+      className={classNames([
         styles.extension,
-        isRecording ? styles.active : undefined
-      ])
-    }>
+        isRecording ? styles.active : undefined,
+      ])}
+    >
       <View
         className={styles.label}
-        onClick={() => isRecording ? handleRecordStop() : handleRecordStart()}
+        onClick={() => (isRecording ? handleRecordStop() : handleRecordStart())}
       >
-        { isRecording ? "录音中" : "录音"}
+        {isRecording ? "录音中" : "录音"}
       </View>
     </View>
   );
