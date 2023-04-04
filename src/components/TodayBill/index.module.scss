@@ -28,7 +28,7 @@
   }
 
   .statistic {
-    font-size: .9em;
+    font-size: 0.9em;
     font-weight: 600;
     display: flex;
     gap: 16rpx;
@@ -45,7 +45,6 @@
   background-color: $color-white-0;
   border-bottom-left-radius: 16rpx;
   border-bottom-right-radius: 16rpx;
-
 
   .list-item {
     display: flex;
@@ -71,12 +70,26 @@
       flex-direction: column;
       width: 0;
 
-      .type {
-        font-size: 1em;
+      .title {
+        display: flex;
+        gap: 12rpx;
+        align-items: center;
+
+        .error {
+          font-size: 0.7rem;
+          background-color: rgba(red, 0.1);
+          color: red;
+          padding: 4rpx 8rpx;
+          border-radius: 8rpx;
+        }
+
+        .type {
+          font-size: 1em;
+        }
       }
 
       .desc {
-        font-size: .8em;
+        font-size: 0.8em;
         color: $color-gray-2;
         overflow: hidden;
         white-space: nowrap;
@@ -93,7 +106,7 @@
       }
 
       .expense {
-        color: $color-black-3
+        color: $color-black-3;
       }
     }
   }

@@ -97,9 +97,14 @@ const TodayBill = (props: PropsType) => {
                 />
               </View>
               <View className={styles["detail-col"]}>
-                <Text className={styles.type}>
-                  {itemValueLabelMap[item.kind]}
-                </Text>
+                <View className={styles.title}>
+                  {item.id === undefined ? (
+                    <Text className={styles.type}>
+                      {itemValueLabelMap[item.kind]}
+                    </Text>
+                  ) : null}
+                  <Text className={styles.error}>未同步</Text>
+                </View>
                 <Text className={styles.desc}>{item.uid}</Text>
               </View>
               <View className={styles["value-col"]}>
