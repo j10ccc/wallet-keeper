@@ -4,10 +4,10 @@ import PageView from "@/components/PageView";
 import { useQueryBills } from "@/stores/useQueryBills";
 import { useBillRecords } from "@/stores/useBillRecords";
 import TodayBill from "@/components/TodayBill";
-
-import styles from "./index.module.scss";
 import { ScrollView } from "@tarojs/components";
 import CreateRecordBubble from "./CreateRecordBubble";
+import WeeklyStatisticCard from "@/components/WeeklyStatisticCard";
+import styles from "./index.module.scss";
 
 type ValidMapType = {
   // key: date string
@@ -43,6 +43,7 @@ const IndexPage = () => {
     <PageView isTabPage>
       <IndexHeader />
       <ScrollView className={styles["scroll-view"]} scrollY>
+        <WeeklyStatisticCard />
         {Object.keys(validMap).map((item) => (
           <TodayBill key={item} date={item} list={validMap[item]} type={type} />
         ))}

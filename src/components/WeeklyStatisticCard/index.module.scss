@@ -1,0 +1,46 @@
+@import "@/styles/variables";
+
+.container {
+  padding: 0 24rpx;
+  padding-top: 16rpx;
+}
+
+.header {
+  background-color: $color-white-1;
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    .sub {
+      display: flex;
+      gap: 12rpx;
+      font-size: 0.8em;
+      color: $color-text-2;
+
+      .income {
+        color: $color-orange;
+      }
+
+      .expense {
+        color: $color-green-5;
+      }
+    }
+  }
+}
+
+.body {
+  background-color: $color-white-0;
+  border-bottom-left-radius: 16rpx;
+  border-bottom-right-radius: 16rpx;
+
+  .chart {
+    padding-top: 24rpx;
+    height: 260rpx;
+  }
+}
