@@ -1,7 +1,7 @@
 @import "@/styles/variables";
 
 .container {
-  padding: 0 16Px;
+  padding: 0 32rpx;
 }
 
 .main {
@@ -11,7 +11,7 @@
   .col {
     display: flex;
     flex-direction: column;
-    gap: 12Px;
+    gap: 24rpx;
 
     .label {
       color: $color-gray-1;
@@ -27,8 +27,8 @@
 .process {
   display: flex;
   justify-content: space-around;
-  padding-bottom: 10Px;
-  padding-top: 12Px;
+  padding-bottom: 20rpx;
+  padding-top: 24rpx;
 
   .dot {
     position: relative;
@@ -37,8 +37,8 @@
   .dot::before {
     position: absolute;
     content: "";
-    height: .4rem;
-    width: .4rem;
+    height: 0.4rem;
+    width: 0.4rem;
     border-radius: 100%;
     background-color: $color-gray-2;
     opacity: 40%;
@@ -52,6 +52,4 @@
   .income:before {
     background-color: $color-orange;
   }
-
-
 }

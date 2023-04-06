@@ -1,0 +1,54 @@
+@import "@/styles/variables";
+
+.container {
+  padding: 32rpx 36rpx;
+  display: flex;
+  background-color: $color-white-0;
+  margin: 0 24rpx;
+  border-radius: 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.heatchart {
+  .grid {
+    display: grid;
+    grid-template-rows: repeat(7, 24rpx);
+    grid-template-columns: repeat(12, 24rpx);
+    grid-row-gap: 6rpx;
+    grid-column-gap: 6rpx;
+    grid-auto-flow: column;
+    opacity: 0.7;
+
+    .item {
+      background-color: rgba($color-gray-3, 0.6);
+      border-radius: 4rpx;
+      transition: all 0.3s;
+    }
+
+    .dark {
+      background-color: $color-brand-dark;
+    }
+
+    .normal {
+      background-color: rgba($color-brand-dark, 0.75);
+    }
+
+    .light {
+      background-color: rgba($color-brand-dark, 0.35);
+    }
+
+    .today {
+      box-shadow: 0 0 0 4rpx $color-green-8;
+    }
+  }
+}
+
+.axis {
+  display: flex;
+  color: $color-text-3;
+  margin-top: 8rpx;
+
+  .month {
+    font-size: 0.7rem;
+  }
+}

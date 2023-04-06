@@ -5,7 +5,7 @@ import F2 from "../F2";
 import { memo, useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import dayjs from "dayjs";
-import { Weekdays } from "@/constants/Weekdays";
+import { Weekdays } from "@/constants/DateChars";
 // import { useQueryBills } from "@/stores/useQueryBills";
 
 type ChartDataType = {
