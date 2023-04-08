@@ -7,6 +7,7 @@
   margin: 0 24rpx;
   border-radius: 32rpx;
   margin-bottom: 24rpx;
+  justify-content: space-between;
 }
 
 .heatchart {
@@ -50,5 +51,27 @@
 
   .month {
     font-size: 0.7rem;
+  }
+}
+
+.statistic-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .item {
+    color: $color-text-3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12rpx;
+
+    .title {
+      font-size: 0.9em;
+    }
+    .value {
+      font-size: 1.2em;
+      font-weight: 600;
+    }
   }
 }

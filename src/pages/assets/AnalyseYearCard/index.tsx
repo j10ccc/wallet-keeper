@@ -23,24 +23,19 @@ const AnalyseYearCard = () => {
   });
 
   const { list: records, indexList } = useBillRecords();
+  // @ts-ignore
+  const today = dayjs().locale({ name: "zh-cn", weekStart: 1 });
+
+  const startDate = useRef(today.startOf("week").subtract(11, "week"));
+  const endDate = useRef(today.endOf("week"));
   const todayIndex = useRef(
     chartSize.current.width * chartSize.current.height -
       1 +
-      dayjs()
-        .startOf("day")
-        .diff(dayjs().locale("zh-cn").startOf("week").day(7), "day")
+      today.startOf("day").diff(endDate.current, "day")
   );
 
-  const startDate = useRef(
-    dayjs().locale("zh-cn").startOf("week").day(1).subtract(11, "week")
-  );
-  const endDate = useRef(dayjs().locale("zh-cn").startOf("week").day(7));
-
-  const [data, setData] = useState<ChartDataType[]>(
-    new Array(chartSize.current.width * chartSize.current.height)
-      .fill(0)
-      .map(() => ({ value: 0 }))
-  );
+  // TODO: change initial rules
+  const [data, setData] = useState<ChartDataType[]>([]);
 
   const [monthLabels, setMonthLabels] = useState<MonthLabelType[]>([]);
 
@@ -155,6 +150,20 @@ const AnalyseYearCard = () => {
               </>
             );
           })}
+        </View>
+      </View>
+      <View className={styles["statistic-info"]}>
+        <View className={styles.item}>
+          <Text className={styles.title}>连续记账天数</Text>
+          <Text className={styles.value}>
+            {[...data].reverse().findIndex((item) => !(item.value > 0))}
+          </Text>
+        </View>
+        <View className={styles.item}>
+          <Text className={styles.title}>近三月累计记账</Text>
+          <Text className={styles.value}>
+            {data.reduce((prev, curr) => curr.value + prev, 0)}
+          </Text>
         </View>
       </View>
     </View>
