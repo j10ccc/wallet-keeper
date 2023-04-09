@@ -7,6 +7,7 @@ declare namespace BillAPI {
     value: number; // 13.89
     kind: string; // meals
     ledgerID: number;
+    remark?: string;
   }
 
   interface DraftType extends Omit<BillRecord, "uid"> {

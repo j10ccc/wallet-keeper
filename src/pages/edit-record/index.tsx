@@ -1,6 +1,9 @@
 import { useEditDraft } from "@/stores/useEditDraft";
-import { View, Text } from "@tarojs/components";
+import { View, Text, Input } from "@tarojs/components";
+import type { CommonEvent } from "@tarojs/components";
+import type { InputEventDetail } from "taro-ui/types/input";
 import { useEffect, useRef, useState } from "react";
+import type { MutableRefObject } from "react";
 import NumberKeyboard from "@/components/NumberKeyboard";
 import Taro, { useRouter } from "@tarojs/taro";
 import KindSelector from "@/components/KindSelector";
@@ -36,11 +39,11 @@ const EditRecordPage = () => {
   const ledgers = useLedger((store) => store.list);
 
   // TODO: loading cache
-  let defaultValue: BillAPI.DraftType;
+  let defaultValue: BillAPI.DraftType | null;
   const { mode, ledgerID } = useRouter().params;
   console.log("page render");
 
-  if (mode === "update") defaultValue = recordInStore!;
+  if (mode === "update") defaultValue = recordInStore;
   else
     defaultValue = {
       date: `${new Date().getFullYear()}-${
@@ -50,8 +53,10 @@ const EditRecordPage = () => {
       kind: expenseItemList[0].value,
       type: "expense",
       ledgerID: ledgerID ? parseInt(ledgerID) : ledgers[0]?.id,
+      remark: undefined,
     };
 
+  // TODO: decrease render times
   useEffect(() => {
     setContent((recordInStore?.value || 0).toFixed(2));
     recordRef.current = {
@@ -60,7 +65,7 @@ const EditRecordPage = () => {
     };
   }, [recordInStore]);
 
-  const recordRef = useRef<BillAPI.DraftType>(defaultValue);
+  const recordRef = useRef<BillAPI.DraftType>(defaultValue) as MutableRefObject<BillAPI.DraftType>;
   const [content, setContent] = useState(
     recordRef.current?.value?.toString() || "0.00"
   );
@@ -74,38 +79,51 @@ const EditRecordPage = () => {
   const onConfirm = async () => {
     const res = evalExpOfTwo(content);
     if (recordRef.current) recordRef.current.value = res;
-    if (mode === "create") {
+    console.log(recordRef.current);
+
+    try {
       let id: number | undefined = undefined;
-      try {
+      if (mode === "create") {
+        // create
         const res = await InsertItemAPI({
           ...omit(recordRef.current, ["ledgerID"]),
           value: recordRef.current.value.toFixed(2),
           type: recordRef.current.type === "expense" ? true : false,
           ledger_id: recordRef.current.ledgerID,
         });
-        console.log("insert result:", res);
-        id = res.data.data;
-      } catch (e) {
-        console.log(e);
-      } finally {
-        addItem({
-          id,
-          uid: useGuid().guid,
-          ...recordRef.current,
-        });
-      }
-    } else if (mode === "update") {
-      updateItem(recordRef.current!.uid!, omit(recordRef.current!, ["uid"]));
-      try {
+        if (res.data.code === 200) {
+          console.log("insert result:", res);
+          id = res.data.data;
+        } else {
+          addItem({
+            id,
+            uid: useGuid().guid,
+            ...recordRef.current,
+          });
+          throw new Error(res.data.msg);
+        }
+      } else if (mode === "update") {
+        // update
+        // TODO: set a property to show offline state
+        updateItem(recordRef.current!.uid!, omit(recordRef.current!, ["uid"]));
+        console.log("updated");
         const res = await UpdateItemAPI({
           ...recordRef.current,
           value: recordRef.current.value.toFixed(2),
           type: recordRef.current.type === "expense" ? true : false,
         });
-        console.log("update result:", res);
-      } catch (e) {
-        console.log(e);
+        if (res.data.code === 200) {
+          console.log("update result:", res);
+        } else {
+          throw new Error(res.data.msg);
+        }
       }
+    } catch (e) {
+      Taro.showToast({
+        icon: "none",
+        title: e.message,
+      });
+      console.log(e.message);
     }
 
     setContent("0");
@@ -163,6 +181,10 @@ const EditRecordPage = () => {
     }
   };
 
+  const handleInputRemark = (e: CommonEvent<InputEventDetail>) => {
+    recordRef.current.remark = e.detail.value as string;
+  };
+
   return (
     <View>
       <KindSelector
@@ -173,6 +195,14 @@ const EditRecordPage = () => {
         }}
       />
       <View className={styles.sum}>
+        <View className={styles.remark}>
+          <Input
+            className={styles.input}
+            placeholder="点此输入备注..."
+            onInput={handleInputRemark}
+            value={defaultValue?.remark}
+          />
+        </View>
         <Text className={styles.content}>{content}</Text>
       </View>
       <MoreProperties record={recordRef} />

@@ -52,6 +52,11 @@
     align-items: center;
     padding: 24rpx 32rpx;
     gap: 16rpx;
+    transition: all .1s;
+
+    &:active {
+      background-color: $color-gray-4;
+    }
 
     .icon-col {
       flex: none;

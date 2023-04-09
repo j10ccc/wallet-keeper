@@ -3,9 +3,9 @@
 .container {
   display: flex;
   justify-content: flex-end;
-  height: 30Px;
-  padding: 4Px 10Px;
-  border-top: 1Px solid $color-gray-4;
+  height: 60rpx;
+  padding: 128rpx 20rpx;
+  border-top: 2rpx solid $color-gray-4;
 
   .content {
     color: $color-brand;
@@ -16,10 +16,18 @@
 
 .sum {
   display: flex;
-  justify-content: flex-end;
-  height: 30Px;
-  padding: 4Px 10Px;
-  border-top: 1Px solid $color-gray-4;
+  height: 60rpx;
+  padding: 20rpx;
+  border-top: 2rpx solid $color-gray-4;
+
+  .remark {
+    flex: 1;
+    padding: 0 16rpx;
+
+    .input {
+      height: 100%;
+    }
+  }
 
   .content {
     color: $color-brand;

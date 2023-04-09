@@ -100,7 +100,7 @@ const TodayBill = (props: PropsType) => {
                 <Text className={styles.type}>
                   {itemValueLabelMap[item.kind]}
                 </Text>
-                <Text className={styles.desc}>{item.uid}</Text>
+                <Text className={styles.desc}>{item.remark}</Text>
               </View>
               <View className={styles["value-col"]}>
                 <Text className={classNames(styles["type"], styles[item.type])}>
