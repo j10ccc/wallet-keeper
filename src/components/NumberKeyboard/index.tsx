@@ -1,5 +1,5 @@
 import { View, Text } from "@tarojs/components";
-import { memo, useRef, useState } from "react";
+import { memo } from "react";
 
 import styles from "./index.module.scss";
 
@@ -16,8 +16,9 @@ type KeyType = {
   trigger?: (key: string) => void
 }
 
-const NumberKeyboard = (props: PropsType) => {
+const NumberKeyboard = ((props: PropsType) => {
   const { onConfirm, onDelete, onInput, onReset } = props;
+  console.log("NumberKeyboard render");
 
   const keyList: KeyType[] = [
     { label: "1" },
@@ -52,7 +53,6 @@ const NumberKeyboard = (props: PropsType) => {
               return onInput(item.label);
             else return item.trigger?.(item.label);
           }}
-          // data-role={item.role}
         >
           <Text className={styles.text}>
             { item.label }
@@ -61,6 +61,6 @@ const NumberKeyboard = (props: PropsType) => {
       )}
     </View>
   );
-};
+});
 
 export default memo(NumberKeyboard);

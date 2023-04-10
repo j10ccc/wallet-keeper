@@ -1,7 +1,7 @@
 import { ScrollView, View, Text } from "@tarojs/components";
 import { AtIcon, AtTabs, AtTabsPane } from "taro-ui";
 import styles from "./index.module.scss";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState, useImperativeHandle } from "react";
 import { expenseItemList, incomeItemList } from "@/constants/RecordItemList";
 import classnames from "classnames";
 
@@ -10,18 +10,40 @@ const tabList = [
   { title: "收入", value: "income" },
 ];
 
+export type KindSelectorRef = {
+  setSelectorState: (kind: string, type: "expense" | "income") => void;
+}
+
 type PropsType = {
   defaultValue?: { kind?: string; type?: string };
   onSelect: (e: { kind: string; type: string }) => void;
 };
 
-const KindSelector = (props: PropsType) => {
+const KindSelector = forwardRef<KindSelectorRef, PropsType>((props: PropsType, ref) => {
   const { defaultValue, onSelect } = props;
   const [kind, setKind] = useState(expenseItemList[0].value);
   const [tabIndex, setTabIndex] = useState(
     defaultValue?.type === "expense" ? 0 : 1
   );
   const [type, setType] = useState("expense");
+
+
+  useImperativeHandle(ref, () => {
+    const setSelectorState = (kind: string, type: "expense" | "income") => {
+      if (type === "expense") {
+        setTabIndex(0);
+        setTabIndex(0);
+      } else if (type === "income"){
+        setTabIndex(1);
+        setTabIndex(1);
+      }
+      handleSelect(kind);
+    };
+
+    return {
+      setSelectorState
+    };
+  });
 
   useEffect(() => {
     if (defaultValue?.kind) {
@@ -106,6 +128,8 @@ const KindSelector = (props: PropsType) => {
       </AtTabsPane>
     </AtTabs>
   );
-};
+});
+
+KindSelector.displayName = "KindSelector";
 
 export default KindSelector;

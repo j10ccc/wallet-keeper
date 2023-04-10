@@ -1,13 +1,13 @@
 import { useEditDraft } from "@/stores/useEditDraft";
-import { View, Text, Input } from "@tarojs/components";
+import { View } from "@tarojs/components";
 import type { CommonEvent } from "@tarojs/components";
 import type { InputEventDetail } from "taro-ui/types/input";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { MutableRefObject } from "react";
 import NumberKeyboard from "@/components/NumberKeyboard";
 import Taro, { useRouter } from "@tarojs/taro";
 import KindSelector from "@/components/KindSelector";
-import styles from "./index.module.scss";
+import type { KindSelectorRef } from "@/components/KindSelector";
 import MoreProperties from "./MoreProperties";
 import { useBillRecords } from "@/stores/useBillRecords";
 import { omit } from "lodash-es";
@@ -16,6 +16,8 @@ import { useGuid } from "@/hooks/useGuid";
 import { InsertItemAPI } from "@/services/bill/InsertItemAPI";
 import { UpdateItemAPI } from "@/services/bill/UpdateItemAPI";
 import { useLedger } from "@/stores/useLedger";
+import AmountViewer from "./AmountViewer";
+import type { AmountViewerRef } from "./AmountViewer";
 
 const evalExpOfTwo = (content: string): number => {
   let res = 0;
@@ -35,8 +37,12 @@ const evalExpOfTwo = (content: string): number => {
 };
 
 const EditRecordPage = () => {
-  const { record: recordInStore } = useEditDraft();
+  const { record: recordInStore, inputMode } = useEditDraft();
   const ledgers = useLedger((store) => store.list);
+
+  // refs
+  const kindSelectorRef = useRef<KindSelectorRef>(null);
+  const amountViewerRef = useRef<AmountViewerRef>(null);
 
   // TODO: loading cache
   let defaultValue: BillAPI.DraftType | null;
@@ -56,9 +62,9 @@ const EditRecordPage = () => {
       remark: undefined,
     };
 
-  // TODO: decrease render times
   useEffect(() => {
-    setContent((recordInStore?.value || 0).toFixed(2));
+    // TODO: when global setter is called, update components states
+    // setContent((recordInStore?.value || 0).toFixed(2));
     recordRef.current = {
       ...recordRef.current,
       ...recordInStore,
@@ -66,17 +72,13 @@ const EditRecordPage = () => {
   }, [recordInStore]);
 
   const recordRef = useRef<BillAPI.DraftType>(defaultValue) as MutableRefObject<BillAPI.DraftType>;
-  const [content, setContent] = useState(
-    recordRef.current?.value?.toString() || "0.00"
-  );
 
   const { updateItem, addItem } = useBillRecords();
   const resetDraft = useEditDraft((state) => state.reset);
 
-  /**
-   * 结算
-   */
+  /** 结算 */
   const onConfirm = async () => {
+    const content = amountViewerRef.current!.amount;
     const res = evalExpOfTwo(content);
     if (recordRef.current) recordRef.current.value = res;
     console.log(recordRef.current);
@@ -91,15 +93,16 @@ const EditRecordPage = () => {
           type: recordRef.current.type === "expense" ? true : false,
           ledger_id: recordRef.current.ledgerID,
         });
+        console.log("insert result:", res);
         if (res.data.code === 200) {
-          console.log("insert result:", res);
           id = res.data.data;
-        } else {
-          addItem({
-            id,
-            uid: useGuid().guid,
-            ...recordRef.current,
-          });
+        }
+        addItem({
+          id,
+          uid: useGuid().guid,
+          ...recordRef.current,
+        });
+        if (res.data.code !== 200) {
           throw new Error(res.data.msg);
         }
       } else if (mode === "update") {
@@ -126,42 +129,46 @@ const EditRecordPage = () => {
       console.log(e.message);
     }
 
-    setContent("0");
+    amountViewerRef.current?.setAmount("0");
     resetDraft();
     Taro.navigateBack();
   };
 
   const onDelete = () => {
-    if (content.length === 1) setContent("0");
-    else setContent((value) => value.slice(0, value.length - 1));
+    if (amountViewerRef.current?.amount.length === 1) {
+      onReset();
+    }
+    else amountViewerRef.current?.setAmount((value) => value.slice(0, value.length - 1));
   };
 
   const onReset = () => {
-    setContent("0");
+    amountViewerRef.current?.setAmount("0");
     // TODO: submit but not close
   };
 
   const onInput = (key: string) => {
+    const content = amountViewerRef.current!.amount;
+
     const currentNum = content.split(/[+]|-/).pop() || "0";
     if (key === ".") {
       // .
       if (currentNum.includes(".")) return;
       // else setContent(content => `${content}${currentNum === "0" ? "0." : key}`);
-      else setContent((content) => content + key);
+      else amountViewerRef.current?.setAmount((content) => content + key);
     } else if (key === "+" || key === "-") {
       // + -
       if (content === "0" || content === "0.00") return;
       if (content.endsWith("+"))
-        setContent((content) => content.slice(0, content.length - 1) + "-");
+        amountViewerRef.current?.setAmount((content) => content.slice(0, content.length - 1) + "-");
       else if (content.endsWith("-"))
-        setContent((content) => content.slice(0, content.length - 1) + "+");
+        amountViewerRef.current?.setAmount((content) => content.slice(0, content.length - 1) + "+");
       else {
         const res = evalExpOfTwo(content);
-        setContent(() => res.toString() + key);
+        amountViewerRef.current?.setAmount(() => res.toString() + key);
       }
     } else {
       // 1 2 3
-      if (content === "0" || content === "0.00") setContent(key);
+      if (content === "0" || content === "0.00") amountViewerRef.current?.setAmount(key);
       else if (currentNum.includes(".") && currentNum.split(".")[1].length == 2)
         Taro.showToast({ title: "最多2位小数", icon: "none" });
       else if (
@@ -169,49 +176,46 @@ const EditRecordPage = () => {
         currentNum.split(".")[0].length === 8
       )
         Taro.showToast({ title: "最多8位整数", icon: "none" });
-      else setContent((content) => content + key);
+      else amountViewerRef.current?.setAmount((content) => content + key);
     }
   };
 
   const handleSelectKind = (e: { kind: string; type: string }) => {
     if (recordRef.current) {
-      // FIXME:
       recordRef.current.type = e.type;
       recordRef.current.kind = e.kind;
     }
   };
 
-  const handleInputRemark = (e: CommonEvent<InputEventDetail>) => {
+  const handleInputRemark = useCallback((e: CommonEvent<InputEventDetail>) => {
     recordRef.current.remark = e.detail.value as string;
-  };
+  }, []);
 
   return (
     <View>
       <KindSelector
+        ref={kindSelectorRef}
         onSelect={handleSelectKind}
         defaultValue={{
           kind: recordRef.current?.kind,
           type: recordRef.current?.type,
         }}
       />
-      <View className={styles.sum}>
-        <View className={styles.remark}>
-          <Input
-            className={styles.input}
-            placeholder="点此输入备注..."
-            onInput={handleInputRemark}
-            value={defaultValue?.remark}
-          />
-        </View>
-        <Text className={styles.content}>{content}</Text>
-      </View>
-      <MoreProperties record={recordRef} />
-      <NumberKeyboard
-        onConfirm={onConfirm}
-        onDelete={onDelete}
-        onInput={onInput}
-        onReset={onReset}
+      <AmountViewer
+        ref={amountViewerRef}
+        defaultAmount={defaultValue?.value.toFixed(2)}
+        defaultRemark={defaultValue?.remark}
+        onInputRemark={handleInputRemark}
       />
+      <MoreProperties record={recordRef} />
+      { inputMode === 0 &&
+        <NumberKeyboard
+          onConfirm={onConfirm}
+          onDelete={onDelete}
+          onInput={onInput}
+          onReset={onReset}
+        />
+      }
     </View>
   );
 };
