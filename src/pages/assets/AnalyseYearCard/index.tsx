@@ -5,6 +5,8 @@ import styles from "./index.module.scss";
 import dayjs from "dayjs";
 import classNames from "classnames";
 import { MonthChars } from "@/constants/DateChars";
+import RecordUtils from "@/utils/RecordUtils";
+import DayUtils from "@/utils/DayUtils";
 
 type ChartDataType = {
   /** 当日记账次数 */
@@ -23,11 +25,10 @@ const AnalyseYearCard = () => {
   });
 
   const { list: records, indexList } = useBillRecords();
-  // @ts-ignore
-  const today = dayjs().locale({ name: "zh-cn", weekStart: 1 });
+  const today = DayUtils.getToday();
+  const startDate = useRef(DayUtils.getThisWeekStartTime().subtract(11, "week"));
+  const endDate = useRef(DayUtils.getThisWeekEndTime());
 
-  const startDate = useRef(today.startOf("week").subtract(11, "week"));
-  const endDate = useRef(today.endOf("week"));
   const todayIndex = useRef(
     chartSize.current.width * chartSize.current.height -
       1 +
@@ -40,54 +41,21 @@ const AnalyseYearCard = () => {
   const [monthLabels, setMonthLabels] = useState<MonthLabelType[]>([]);
 
   useEffect(() => {
-    // TODO: handle with empty indexList case
     if (!indexList?.length) return;
 
-    let startIndex = indexList.findIndex((item) =>
-      dayjs(item.date).isBefore(startDate.current, "day")
-    );
-    if (startIndex === -1) {
-      startIndex = indexList.length - 1;
-    }
+    const { startIndex: recordStartIndex, endIndex: recordEndIndex  } =
+      RecordUtils.addressRecordIndex(
+        indexList,
+        records,
+        startDate.current,
+        endDate.current
+      );
 
-    let endIndex = indexList.findIndex((item) =>
-      dayjs(item.date).isBefore(endDate.current, "day")
-    );
-    if (endIndex === -1) {
-      endIndex = indexList.length - 1;
-    }
-
-    let recordEndIndex = records
-      .slice(
-        indexList[endIndex].index,
-        indexList[endIndex].index + indexList[endIndex].length
-      )
-      .findIndex((item) => !dayjs(item.date).isAfter(endDate.current, "day"));
-    if (recordEndIndex === -1) {
-      recordEndIndex =
-        indexList[endIndex].index + indexList[endIndex].length - 1;
-    } else {
-      recordEndIndex = indexList[endIndex].index + recordEndIndex;
-    }
-
-    let recordStartIndex = records
-      .slice(
-        indexList[startIndex].index,
-        indexList[startIndex].index + indexList[startIndex].length
-      )
-      .findIndex((item) => !dayjs(item.date).isAfter(startDate.current, "day"));
-    if (recordStartIndex === -1) {
-      recordStartIndex =
-        indexList[startIndex].index + indexList[startIndex].length - 1;
-    } else {
-      recordStartIndex = indexList[startIndex].index + recordStartIndex;
-    }
-
+    /** 热力图每个点的数据 */
     const dataTmp: typeof data = new Array(
       chartSize.current.height * chartSize.current.width
-    )
-      .fill(0)
-      .map(() => ({ value: 0 }));
+    ).fill(0).map(() => ({ value: 0 }));
+
     records.slice(recordEndIndex, recordStartIndex + 1).forEach((item) => {
       const diff = endDate.current.diff(dayjs(item.date), "day");
       dataTmp[chartSize.current.height * chartSize.current.width - 1 - diff]
@@ -97,7 +65,6 @@ const AnalyseYearCard = () => {
   }, [records]);
 
   useEffect(() => {
-    // TODO: handle with empty indexList case
     const monthLabelsData: typeof monthLabels = [];
     let startMonth = 0;
     for (let i = 0; i < chartSize.current.width; i++) {
@@ -137,17 +104,15 @@ const AnalyseYearCard = () => {
         <View className={styles.axis}>
           {monthLabels.map((item) => {
             return (
-              <>
-                <Text
-                  key={`${item.label}-content`}
-                  className={styles.month}
-                  style={{
-                    flex: `0 calc(100% / ${chartSize.current.width} * ${item.columns})`,
-                  }}
-                >
-                  {item.label}
-                </Text>
-              </>
+              <Text
+                key={`${item.label}-content`}
+                className={styles.month}
+                style={{
+                  flex: `0 calc(100% / ${chartSize.current.width} * ${item.columns})`,
+                }}
+              >
+                {item.label}
+              </Text>
             );
           })}
         </View>
