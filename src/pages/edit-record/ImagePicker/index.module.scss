@@ -1,0 +1,50 @@
+@import "@/styles/variables";
+
+.container {
+  height: 480rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 24rpx;
+
+  .body {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: auto;
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      padding: 24rpx;
+      height: 180rpx;
+      width: 180rpx;
+      align-items: center;
+      background-color: $color-gray-4;
+      border-radius: 32rpx;
+      transition: all .2s;
+
+      &:active {
+        background-color: $color-gray-3;
+      }
+
+      .label {
+        color: $color-text-3;
+      }
+    }
+  }
+  .footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .back {
+      padding: 6rpx;
+      color: $color-text-2;
+    }
+
+  }
+
+}

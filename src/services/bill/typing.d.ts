@@ -3,7 +3,7 @@ declare namespace BillAPI {
     id?: number; // remote id
     uid: string;
     date: string; // 日期 2021-12-1
-    type: string; // income | expense
+    type: "income" | "expense"; // income | expense
     value: number; // 13.89
     kind: string; // meals
     ledgerID: number;

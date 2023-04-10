@@ -1,16 +1,18 @@
 import create from "zustand";
 
+type InputMode = "keyboard" | "image" | "voice";
+
 type EditDraftState = {
   record: BillAPI.DraftType | null;
-  inputMode: number,
+  inputMode: InputMode,
   setDraft: (item: BillAPI.DraftType) => void;
-  setInputMode: (index: number) => void;
+  setInputMode: (index: InputMode) => void;
   reset: () => void;
 };
 
 export const useEditDraft = create<EditDraftState>((set) => ({
   record: null,
-  inputMode: 1,
+  inputMode: "keyboard",
   setDraft: (record) => set(() => ({ record })),
   setInputMode: (index) => set(() => ({ inputMode: index})),
   reset: () => set(() => ({ record: null })),

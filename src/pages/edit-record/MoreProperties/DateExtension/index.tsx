@@ -1,33 +1,42 @@
 import DateSelectorModal from "@/components/DateSelectorModal";
 import useDay from "@/hooks/useDay";
 import { View } from "@tarojs/components";
-import { useState, useEffect } from "react";
+import { useState, forwardRef, useImperativeHandle, useContext } from "react";
+import EditContext from "../../EditContext";
 
 import styles from "./index.module.scss";
 
-const DateExtension = ({
-  record,
-}: {
-  record: React.RefObject<BillAPI.DraftType>;
-}) => {
-  const defaultDate = record.current?.date;
+export type DateExtensionRef = {
+  setDate: (date: string) => void;
+}
+
+const DateExtension = forwardRef<DateExtensionRef, {
+  defaultValue: string;
+}>((props, ref) => {
+  const defaultDate = props.defaultValue;
   const [date, setDate] = useState("今天");
   const [showDateSelector, setShowDateSelector] = useState(false);
+  const { recordRef, updateEffect } = useContext(EditContext);
 
-  useEffect(() => {
-    defaultDate &&
-      setDate(() => {
-        const { isToday, isYesterday, isTheDayBeforeYesterday } =
-          useDay(defaultDate);
-        if (isToday) return "今天";
-        else if (isYesterday) return "昨天";
-        else if (isTheDayBeforeYesterday) return "前天";
-        else return defaultDate;
-      });
-  });
+  useImperativeHandle(ref, () => {
+    return {
+      setDate: transformDate,
+    };
+  }, []);
+
+  const transformDate = (date: string) => {
+    setDate(() => {
+      const { isToday, isYesterday, isTheDayBeforeYesterday } =
+          useDay(date);
+      if (isToday) return "今天";
+      else if (isYesterday) return "昨天";
+      else if (isTheDayBeforeYesterday) return "前天";
+      else return date;
+    });
+  };
 
   const onSubmit = (date: string) => {
-    if (record.current) record.current.date = date;
+    updateEffect({ date });
     setShowDateSelector(false);
   };
 
@@ -38,7 +47,7 @@ const DateExtension = ({
   return (
     <>
       <DateSelectorModal
-        defaultDate={record.current?.date}
+        defaultDate={defaultDate}
         isShow={showDateSelector}
         onConfirm={onSubmit}
         onClose={onClose}
@@ -53,6 +62,8 @@ const DateExtension = ({
       </View>
     </>
   );
-};
+});
+
+DateExtension.displayName = "DateExtension";
 
 export default DateExtension;

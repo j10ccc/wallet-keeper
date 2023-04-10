@@ -2,13 +2,13 @@ import { useEditDraft } from "@/stores/useEditDraft";
 import { View } from "@tarojs/components";
 import type { CommonEvent } from "@tarojs/components";
 import type { InputEventDetail } from "taro-ui/types/input";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import type { MutableRefObject } from "react";
 import NumberKeyboard from "@/components/NumberKeyboard";
 import Taro, { useRouter } from "@tarojs/taro";
 import KindSelector from "@/components/KindSelector";
 import type { KindSelectorRef } from "@/components/KindSelector";
-import MoreProperties from "./MoreProperties";
+import MoreProperties, { MorePropertiesRef } from "./MoreProperties";
 import { useBillRecords } from "@/stores/useBillRecords";
 import { omit } from "lodash-es";
 import { expenseItemList } from "@/constants/RecordItemList";
@@ -18,6 +18,8 @@ import { UpdateItemAPI } from "@/services/bill/UpdateItemAPI";
 import { useLedger } from "@/stores/useLedger";
 import AmountViewer from "./AmountViewer";
 import type { AmountViewerRef } from "./AmountViewer";
+import ImagePicker from "./ImagePicker";
+import EditContext from "./EditContext";
 
 const evalExpOfTwo = (content: string): number => {
   let res = 0;
@@ -43,6 +45,7 @@ const EditRecordPage = () => {
   // refs
   const kindSelectorRef = useRef<KindSelectorRef>(null);
   const amountViewerRef = useRef<AmountViewerRef>(null);
+  const morePropertiesRef = useRef<MorePropertiesRef>(null);
 
   // TODO: loading cache
   let defaultValue: BillAPI.DraftType | null;
@@ -61,15 +64,6 @@ const EditRecordPage = () => {
       ledgerID: ledgerID ? parseInt(ledgerID) : ledgers[0]?.id,
       remark: undefined,
     };
-
-  useEffect(() => {
-    // TODO: when global setter is called, update components states
-    // setContent((recordInStore?.value || 0).toFixed(2));
-    recordRef.current = {
-      ...recordRef.current,
-      ...recordInStore,
-    };
-  }, [recordInStore]);
 
   const recordRef = useRef<BillAPI.DraftType>(defaultValue) as MutableRefObject<BillAPI.DraftType>;
 
@@ -180,7 +174,7 @@ const EditRecordPage = () => {
     }
   };
 
-  const handleSelectKind = (e: { kind: string; type: string }) => {
+  const handleSelectKind = (e: { kind: string; type: "income" | "expense" }) => {
     if (recordRef.current) {
       recordRef.current.type = e.type;
       recordRef.current.kind = e.kind;
@@ -191,32 +185,70 @@ const EditRecordPage = () => {
     recordRef.current.remark = e.detail.value as string;
   }, []);
 
+  /** 增量更新 patch，同时更新视图 */
+  const updateEffect = (newRecord: Partial<BillAPI.DraftType>) => {
+    console.log("patch", newRecord);
+    if (newRecord.value && newRecord.value != recordRef.current.value) {
+      amountViewerRef.current?.setAmount(newRecord.value.toFixed(3));
+      recordRef.current.value = newRecord.value;
+    }
+    if (newRecord.remark && newRecord.remark != recordRef.current.remark) {
+      amountViewerRef.current?.setRemark(newRecord.remark || "");
+      recordRef.current.remark = newRecord.remark;
+    }
+    if ((newRecord.kind && newRecord.type)
+      && (newRecord.kind != recordRef.current.kind
+      || newRecord.type != recordRef.current.type)
+    ) {
+      kindSelectorRef.current?.setSelectorState(newRecord.kind, newRecord.type);
+      recordRef.current.kind = newRecord.kind;
+      recordRef.current.type = newRecord.type;
+    }
+
+    if (newRecord.date && newRecord.date != recordRef.current.date) {
+      morePropertiesRef.current?.setDate(newRecord.date);
+      recordRef.current.date = newRecord.date;
+    }
+    // TODO:
+  };
+
   return (
-    <View>
-      <KindSelector
-        ref={kindSelectorRef}
-        onSelect={handleSelectKind}
-        defaultValue={{
-          kind: recordRef.current?.kind,
-          type: recordRef.current?.type,
-        }}
-      />
-      <AmountViewer
-        ref={amountViewerRef}
-        defaultAmount={defaultValue?.value.toFixed(2)}
-        defaultRemark={defaultValue?.remark}
-        onInputRemark={handleInputRemark}
-      />
-      <MoreProperties record={recordRef} />
-      { inputMode === 0 &&
-        <NumberKeyboard
-          onConfirm={onConfirm}
-          onDelete={onDelete}
-          onInput={onInput}
-          onReset={onReset}
+    <EditContext.Provider value={{
+      kindSelectorRef,
+      amountViewerRef,
+      recordRef,
+      updateEffect
+    }}>
+      <View>
+        <KindSelector
+          ref={kindSelectorRef}
+          onSelect={handleSelectKind}
+          defaultValue={{
+            kind: recordRef.current?.kind,
+            type: recordRef.current?.type,
+          }}
         />
-      }
-    </View>
+        <AmountViewer
+          ref={amountViewerRef}
+          defaultAmount={defaultValue?.value.toFixed(2)}
+          defaultRemark={defaultValue?.remark}
+          onInputRemark={handleInputRemark}
+        />
+        <MoreProperties
+          ref={morePropertiesRef}
+          record={recordRef} />
+        {
+          inputMode === "keyboard" &&
+            <NumberKeyboard
+              onConfirm={onConfirm}
+              onDelete={onDelete}
+              onInput={onInput}
+              onReset={onReset}
+            />
+        }
+        { inputMode === "image" && <ImagePicker /> }
+      </View>
+    </EditContext.Provider>
   );
 };
 

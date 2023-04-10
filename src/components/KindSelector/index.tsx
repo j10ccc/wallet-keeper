@@ -27,7 +27,6 @@ const KindSelector = forwardRef<KindSelectorRef, PropsType>((props: PropsType, r
   );
   const [type, setType] = useState("expense");
 
-
   useImperativeHandle(ref, () => {
     const setSelectorState = (kind: string, type: "expense" | "income") => {
       if (type === "expense") {
@@ -37,7 +36,8 @@ const KindSelector = forwardRef<KindSelectorRef, PropsType>((props: PropsType, r
         setTabIndex(1);
         setTabIndex(1);
       }
-      handleSelect(kind);
+      const realKind = expenseItemList.find(item => item.value === kind)?.value;
+      handleSelect(realKind || "other");
     };
 
     return {
