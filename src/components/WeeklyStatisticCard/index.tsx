@@ -6,7 +6,8 @@ import { memo, useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import dayjs from "dayjs";
 import { Weekdays } from "@/constants/DateChars";
-// import { useQueryBills } from "@/stores/useQueryBills";
+import RecordUtils from "@/utils/RecordUtils";
+import DayUtils from "@/utils/DayUtils";
 
 type ChartDataType = {
   value: number;
@@ -15,7 +16,7 @@ type ChartDataType = {
 };
 
 const WeeklyStatisticCard = () => {
-  const records = useBillRecords((store) => store.list);
+  const { list: records, indexList } = useBillRecords();
   // TODO: trigger render by selected queryType
   // const queryType = useQueryBills((store) => store.type);
   const [queryType] = useState<"default" | "expense" | "income">("default");
@@ -25,10 +26,12 @@ const WeeklyStatisticCard = () => {
   const [data, setData] = useState<Array<ChartDataType>>([]);
 
   useEffect(() => {
-    const daysAgoDate = dayjs().subtract(((dayjs().day() + 6) % 7) + 1, "day");
-    const index = records.findIndex(
-      (item) => !dayjs(item.date).isAfter(daysAgoDate, "day")
-    );
+    const startDate = DayUtils.getThisWeekStartTime();
+    const endDate = DayUtils.getThisWeekEndTime();
+
+    const {startIndex, endIndex} =
+      RecordUtils.addressRecordIndex(indexList, records, startDate, endDate);
+
     incomeData.current = Weekdays.map((item) => ({
       type: "income",
       weekday: item,
@@ -40,7 +43,7 @@ const WeeklyStatisticCard = () => {
       value: 0,
     }));
 
-    records.slice(0, index).forEach((item) => {
+    records.slice(endIndex, startIndex + 1).forEach((item) => {
       const weekdayIndex = dayjs(item.date).day() || 7;
       if (item.type === "income")
         incomeData.current[weekdayIndex - 1].value += item.value;
