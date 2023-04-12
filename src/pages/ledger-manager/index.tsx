@@ -67,6 +67,10 @@ const LedgerManagerPage = () => {
           Taro.navigateTo({
             url: "create/index",
           });
+        } else if ( e.tapIndex === 1) {
+          Taro.navigateTo({
+            url: "join/index"
+          });
         }
       },
       fail: (e) => {

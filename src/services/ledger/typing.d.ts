@@ -32,4 +32,11 @@ declare namespace LedgerAPI {
   }
 
   interface FetchShareCode_Result extends Common.IResponse<string> {}
+
+  interface JoinLedger_Data {
+    code: string;
+  }
+
+  interface JoinLedger_Result extends Common.IResponse<null> {}
+
 }
