@@ -1,3 +1,7 @@
 import CellLabel from "./CellLabel";
+import CalendarView from "./CalendarView";
 
-export { CellLabel };
+export {
+  CellLabel,
+  CalendarView
+};

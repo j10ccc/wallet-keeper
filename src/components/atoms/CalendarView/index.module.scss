@@ -1,0 +1,56 @@
+@import "@/styles/variables.scss";
+
+.container {
+
+  .body {
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-gap: 12rpx;
+
+      .item {
+        aspect-ratio: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .text {
+          aspect-ratio: 1;
+          width: 80%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 100rpx;
+        }
+      }
+
+      .weekday {
+        color: $color-text-3;
+        font-size: .9em;
+        text-align: center;
+        aspect-ratio: 1;
+      }
+
+      .day {
+        opacity: .3;
+        // color: $color-text-3;
+      }
+
+      .current {
+        opacity: 1;
+        color: $color-text-1;
+      }
+
+      .today {
+        color: $color-white-1;
+        border-radius: 100rpx;
+
+        .text {
+          background-color: $color-brand;
+        }
+      }
+    }
+  }
+}
+

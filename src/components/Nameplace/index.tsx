@@ -1,6 +1,6 @@
 import { View, Text } from "@tarojs/components";
 import { useUser } from "@/stores/useUser";
-import { AtAvatar } from "taro-ui";
+import { AtAvatar, AtIcon } from "taro-ui";
 import Taro from "@tarojs/taro";
 import useRequest from "@/hooks/useRequest";
 import { LoginByWXAPI } from "@/services/public/LoginAPI";
@@ -48,6 +48,12 @@ const Nameplace = () => {
   const handleRegister = async () => {
     Taro.navigateTo({
       url: "register/index"
+    });
+  };
+
+  const handleClickClockin = () => {
+    Taro.navigateTo({
+      url: "/pages/clockin/index"
     });
   };
 
@@ -100,9 +106,15 @@ const Nameplace = () => {
       <View className={styles.actions}>
         {
           isLogin ?
-            <View style={{ flex: "auto"}} className={styles.button} onClick={handleEnterProfile}>
-              <Text className={styles.label}>编辑</Text>
-            </View> :
+            <>
+              <View style={{ flex: "auto"}} className={styles.button} onClick={handleEnterProfile}>
+                <Text className={styles.label}>编辑</Text>
+              </View>
+              <View className={styles.clockin} onClick={handleClickClockin}>
+                <AtIcon prefixClass="icon" value="clockin" size={18}/>
+                <Text>签到</Text>
+              </View>
+            </> :
             <>
               <View
                 style={{ flex: "0 50%" }}

@@ -66,6 +66,15 @@ $avatar-height: 70Px;
 .actions {
   display: flex;
   gap: 12Px;
+  align-items: center;
+
+  .clockin {
+    display: flex;
+    gap: 6rpx;
+    color: $color-brand;
+    padding: 12rpx; 
+    align-items: center;
+  }
 
   .button {
     background-color: $color-brand;

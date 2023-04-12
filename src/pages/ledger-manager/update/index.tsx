@@ -5,9 +5,9 @@ import { Text, View } from "@tarojs/components";
 import Taro, { getCurrentInstance } from "@tarojs/taro";
 import { AtInput, AtList, AtListItem, AtSwitch } from "taro-ui";
 import { useEffect, useRef, useState } from "react";
-import styles from "./index.module.scss";
 import { CellLabel } from "@/components/atoms";
 import LedgerService from "@/services/ledger";
+import styles from "./index.module.scss";
 
 const UpdateLedgerPage = () => {
   const { router } = getCurrentInstance();
