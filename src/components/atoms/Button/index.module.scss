@@ -1,0 +1,60 @@
+@import "@/styles/variables";
+
+.button {
+  padding: 24rpx 28rpx;
+  text-align: center;
+  display: inline-block;
+  transition: all .1s;
+
+  &:active {
+    filter: brightness(.95);
+  }
+}
+
+.block {
+  display: block;
+}
+
+.primary {
+
+  &.solid {
+    background-color: $color-brand;
+  }
+
+  &.outline {
+    color: $color-brand;
+    border: 2rpx solid $color-brand;
+  }
+}
+
+.solid {
+  color: $color-white-0;
+}
+
+.danger {
+
+  &.solid {
+    background-color: red;
+  }
+
+  &.outline {
+    color: red;
+    border: 2rpx solid red;
+  }
+}
+
+.disabled {
+  opacity: .6;
+}
+
+.rounded {
+  border-radius: 100rpx;
+}
+
+.default {
+  border-radius: 8rpx;
+}
+
+.loading {
+  opacity: .6;
+}

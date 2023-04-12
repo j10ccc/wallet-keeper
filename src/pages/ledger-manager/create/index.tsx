@@ -1,8 +1,9 @@
+import Button from "@/components/atoms/Button";
 import FormPageHeader from "@/components/FormPageHeader";
 import PageView from "@/components/PageView";
 import { View, Text } from "@tarojs/components";
 import { createContext, useContext, useRef, useState } from "react";
-import { AtButton, AtForm, AtIcon, AtInput, AtSwitch } from "taro-ui";
+import { AtForm, AtIcon, AtInput, AtSwitch } from "taro-ui";
 import styles from "./index.module.scss";
 import { ledgerTemplateList } from "@/constants/LedgerTemplateList";
 import classname from "classnames";
@@ -14,10 +15,12 @@ import { useLedger } from "@/stores/useLedger";
 const TemplateSelectorContext = createContext<{
   templateName: string | undefined;
   setTemplateName: (value: string | undefined) => void;
-}>({
-  templateName: "未知模版",
-  setTemplateName: () => {},
-});
+    }>({
+      templateName: "未知模版",
+      setTemplateName: () => {
+        // empty
+      },
+    });
 
 const LedgerTemplateCard = (props: {
   name: string;
@@ -128,13 +131,13 @@ const CreateLedgerPage = () => {
         </View>
       </TemplateSelectorContext.Provider>
       <View className={styles.actions}>
-        <AtButton
+        <Button
           loading={createLedger.loading}
-          type="primary"
           onClick={handleFinish}
+          block
         >
           创建
-        </AtButton>
+        </Button>
       </View>
     </PageView>
   );

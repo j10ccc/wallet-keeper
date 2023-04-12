@@ -1,8 +1,9 @@
+import Button from "@/components/atoms/Button";
 import FormPageHeader from "@/components/FormPageHeader";
 import PageView from "@/components/PageView";
 import { useUser } from "@/stores/useUser";
 import { View } from "@tarojs/components";
-import { AtButton, AtList, AtListItem } from "taro-ui";
+import { AtList, AtListItem } from "taro-ui";
 import Taro from "@tarojs/taro";
 import ChangeBirthdayRow from "./change-birthday";
 import ChangeGenderRow from "./change-gender";
@@ -43,16 +44,17 @@ const ProfilePage = () => {
         />
       </AtList>
     </View>
-    <AtButton
-      full
-      type="secondary"
-      customStyle={{
-        border: "2rpx solid red",
-        color: "red"
-      }}
-      onClick={handleLogout}
-    >退出登录
-    </AtButton>
+    <View className={styles.footer}>
+      <Button
+        fill="outline"
+        onClick={handleLogout}
+        color="danger"
+        block
+      >
+      退出登陆
+      </Button>
+    </View>
+
   </PageView>;
 };
 

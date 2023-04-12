@@ -1,3 +1,4 @@
+import Button from "@/components/atoms/Button";
 import FormPageHeader from "@/components/FormPageHeader";
 import PageView from "@/components/PageView";
 import useRequest from "@/hooks/useRequest";
@@ -7,7 +8,6 @@ import { View } from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import { useEffect, useState } from "react";
 import {
-  AtButton,
   AtForm,
   AtInput,
 } from "taro-ui";
@@ -80,10 +80,13 @@ const LoginPage = () => {
         onChange={(value: string) => setPassword(value)}
       />
       <View style={{
-        padding: "0 32rpx"
+        padding: "32rpx",
+        display: "flex",
+        flexDirection: "column",
+        gap: "24rpx"
       }}>
-        <AtButton type="primary" formType="submit">提交</AtButton>
-        <AtButton formType="reset">重置</AtButton>
+        <Button block>提交</Button>
+        <Button fill="outline" block>重置</Button>
       </View>
     </AtForm>
   </PageView>;
