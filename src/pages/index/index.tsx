@@ -8,6 +8,8 @@ import { ScrollView } from "@tarojs/components";
 import CreateRecordBubble from "./CreateRecordBubble";
 import WeeklyStatisticCard from "@/components/WeeklyStatisticCard";
 import styles from "./index.module.scss";
+import UserUtils from "@/utils/UserUtils";
+import { useUser } from "@/stores/useUser";
 
 type ValidMapType = {
   // key: date string
@@ -18,6 +20,15 @@ const IndexPage = () => {
   const { date, type, ledgerID } = useQueryBills();
   const { list: originList } = useBillRecords();
   const [validMap, setValidMap] = useState<ValidMapType>({});
+  const { isLogin, setToken } = useUser();
+
+  useEffect(() => {
+    if (isLogin) {
+      UserUtils.refreshUserToken().then(res => {
+        setToken(res);
+      });
+    }
+  }, []);
 
   const filterList = () => {
     setValidMap((state) => {
