@@ -14,6 +14,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-camera:before {
+  content: "\e77e";
+}
+
+.icon-train:before {
+  content: "\e638";
+}
+
+.icon-keyboard:before {
+  content: "\e6d7";
+}
+
+.icon-microphone:before {
+  content: "\e8c2";
+}
+
 .icon-clockin:before {
   content: "\e606";
 }

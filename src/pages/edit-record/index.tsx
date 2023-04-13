@@ -20,6 +20,7 @@ import AmountViewer from "./AmountViewer";
 import type { AmountViewerRef } from "./AmountViewer";
 import ImagePicker from "./ImagePicker";
 import EditContext from "./EditContext";
+import VoiceRecorder from "./VoiceRecorder";
 
 const evalExpOfTwo = (content: string): number => {
   let res = 0;
@@ -247,6 +248,7 @@ const EditRecordPage = () => {
             />
         }
         { inputMode === "image" && <ImagePicker /> }
+        { inputMode === "voice" && <VoiceRecorder /> }
       </View>
     </EditContext.Provider>
   );

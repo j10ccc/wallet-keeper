@@ -1,0 +1,62 @@
+@import "@/styles/variables";
+
+.container {
+  height: 480rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+
+  .header {
+    .tip {
+      padding-top: 32rpx;
+      text-align: center;
+      color: $color-text-3;
+    }
+  }
+
+  .body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex: auto;
+    gap: 24rpx;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 150rpx;
+      width: 150rpx;
+      background-color: $color-gray-4;
+      color: $color-gray-2;
+      border-radius: 100rpx;
+      transition: all .3s;
+
+      &:active {
+        background-color: $color-gray-3;
+      }
+
+    }
+
+    .tip {
+      font-size: .9em;
+      padding: 12rpx 0;
+      color: $color-text-3;
+    }
+  }
+
+  .footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 48rpx;
+    box-sizing: border-box;
+
+    .icon {
+      color: $color-gray-3;
+      padding: 8rpx;
+    }
+  }
+}
