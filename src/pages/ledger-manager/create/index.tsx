@@ -2,7 +2,7 @@ import Button from "@/components/atoms/Button";
 import FormPageHeader from "@/components/FormPageHeader";
 import PageView from "@/components/PageView";
 import { View, Text } from "@tarojs/components";
-import { createContext, useContext, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { AtForm, AtIcon, AtInput, AtSwitch } from "taro-ui";
 import styles from "./index.module.scss";
 import { ledgerTemplateList } from "@/constants/LedgerTemplateList";
@@ -11,52 +11,54 @@ import LedgerService from "@/services/ledger";
 import Taro from "@tarojs/taro";
 import useRequest from "@/hooks/useRequest";
 import { useLedger } from "@/stores/useLedger";
+import { useUser } from "@/stores/useUser";
 
-const TemplateSelectorContext = createContext<{
-  templateName: string | undefined;
-  setTemplateName: (value: string | undefined) => void;
-    }>({
-      templateName: "未知模版",
-      setTemplateName: () => {
-        // empty
-      },
-    });
-
-const LedgerTemplateCard = (props: {
-  name: string;
-  color: string;
-  icon: string;
+const TemplateGrid = (props: {
+  onSelect: (templateName: string) => void;
 }) => {
-  const { templateName, setTemplateName } = useContext(TemplateSelectorContext);
+  const [templateName, setTemplateName] = useState<string>("default");
+
+  const handleTemplateClick = (name: string) => {
+    setTemplateName(name);
+    props.onSelect(name);
+  };
 
   return (
-    <View
-      className={classname([
-        styles.card,
-        templateName === props.name ? styles.selected : undefined,
-      ])}
-      style={{ backgroundColor: props.color }}
-      onClick={() => setTemplateName(props.name)}
-    >
-      <Text className={styles.name}>{props.name}</Text>
-      <View className={styles.icon}>
-        <AtIcon
-          prefixClass="icon"
-          value={`ledger-${props.icon}`}
-          size={64}
-          // color={props.color}
-        />
-      </View>
+    <View className={styles.templates}>
+      {ledgerTemplateList.map((item) => (
+        <View
+          key={item.name}
+          className={classname([
+            styles.card,
+            templateName === item.name ? styles.selected : undefined,
+          ])}
+          style={{ backgroundColor: item.color }}
+          onClick={() => handleTemplateClick(item.name)}
+        >
+          <Text className={styles.name}>{item.name}</Text>
+          <View className={styles.icon}>
+            <AtIcon
+              prefixClass="icon"
+              value={`ledger-${item.icon}`}
+              size={64}
+            />
+          </View>
+        </View>
+      ))}
     </View>
   );
 };
 
+interface IFormData extends Omit<LedgerAPI.Ledger, "id" | "owner">{}
+
 const CreateLedgerPage = () => {
-  const formDataRef = useRef<Omit<LedgerAPI.Ledger, "id">>({
+  const formDataRef = useRef<IFormData>({
     name: "",
     isPublic: false,
+    template: "default"
   });
   const addLedgerInStore = useLedger((store) => store.create);
+  const userName = useUser(store => store.username);
 
   const createLedger = useRequest(LedgerService.CreateItemAPI, {
     manual: true,
@@ -67,6 +69,8 @@ const CreateLedgerPage = () => {
           id: response.data.data,
           name: params!.name,
           isPublic: params!.is_public,
+          owner: userName!,
+          template: params!.template
         });
       } else {
         throw new Error(response.data.msg);
@@ -80,15 +84,15 @@ const CreateLedgerPage = () => {
     },
   });
 
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    string | undefined
-  >();
+  const handleTemplateSelect = useCallback((name: string) => {
+    formDataRef.current.template = name;
+  }, []);
 
   const handleFinish = async () => {
-    console.log(formDataRef);
     createLedger.run({
       name: formDataRef.current.name,
       is_public: formDataRef.current.isPublic,
+      template: formDataRef.current.template
     });
   };
 
@@ -112,24 +116,10 @@ const CreateLedgerPage = () => {
           }}
         />
       </AtForm>
-      <TemplateSelectorContext.Provider
-        value={{
-          templateName: selectedTemplate,
-          setTemplateName: setSelectedTemplate,
-        }}
-      >
+      <View>
         <Text className={styles.title}>推荐模板</Text>
-        <View className={styles.templates}>
-          {ledgerTemplateList.map((item) => (
-            <LedgerTemplateCard
-              key={item.icon}
-              icon={item.icon}
-              name={item.name}
-              color={item.color}
-            />
-          ))}
-        </View>
-      </TemplateSelectorContext.Provider>
+        <TemplateGrid onSelect={handleTemplateSelect}/>
+      </View>
       <View className={styles.actions}>
         <Button
           loading={createLedger.loading}

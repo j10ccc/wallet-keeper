@@ -7,6 +7,7 @@ import LedgerService from "@/services/ledger";
 import styles from "./index.module.scss";
 import Taro from "@tarojs/taro";
 import { useLedger } from "@/stores/useLedger";
+import { omit } from "lodash-es";
 
 type FormData = {
   code: string;
@@ -30,9 +31,8 @@ const JoinLedgerPage = () => {
       if (res.data.code === 200) {
         ledgerStore.overwrite(
           res.data.data.map(item => ({
-            ...item,
-            // FIXME
-            isPublic: true
+            ...omit(item, ["is_public"]),
+            isPublic: item.is_public || false
           }))
         );
         Taro.navigateBack();

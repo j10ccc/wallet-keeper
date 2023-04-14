@@ -21,6 +21,8 @@ const UpdateLedgerPage = () => {
     id: -1,
     name: "",
     isPublic: false,
+    template: "default",
+    owner: "未知用户"
   });
   const [initialFormData, setInitialFormData] = useState<LedgerAPI.Ledger>(
     formDataRef.current

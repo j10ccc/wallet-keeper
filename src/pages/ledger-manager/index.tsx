@@ -6,38 +6,68 @@ import classNames from "classnames";
 import Taro from "@tarojs/taro";
 import { AtIcon } from "taro-ui";
 import { useQueryBills } from "@/stores/useQueryBills";
-
-import styles from "./index.module.scss";
 import { useLedger } from "@/stores/useLedger";
+import styles from "./index.module.scss";
+import { useUser } from "@/stores/useUser";
+import { useState } from "react";
+import { ledgerTemplateList } from "@/constants/LedgerTemplateList";
+import { omit } from "lodash-es";
 
-const LedgerCard = (props: { name: string; id: number; selected: boolean }) => {
+const LedgerCard = (props: {
+  ledger: LedgerAPI.Ledger;
+  selected: boolean;
+}) => {
   const { setLedgerID } = useQueryBills();
+  const { ledger, selected } = props;
+  const userStore = useUser();
+  const [icon] = useState(() => {
+    if (ledger.template === "default") return null;
+    else {
+      return ledgerTemplateList.find(item =>
+        item.name === ledger.template
+      )!;
+    }
+  });
 
   const handleSelect = () => {
     // TODO: set store state
-    setLedgerID(props.id);
-    console.log(props.id);
+    setLedgerID(ledger.id);
+    console.log(ledger.id);
     Taro.navigateBack();
   };
 
   const handleEdit = (e) => {
     e.stopPropagation();
     Taro.navigateTo({
-      url: `update/index?id=${props.id}`,
+      url: `update/index?id=${ledger.id}`,
     });
   };
 
   return (
     <View className={styles.card} onClick={handleSelect}>
-      {props.selected && (
+      {selected && (
         <View className={styles.select}>
           <AtIcon prefixClass="icon" value="ok" size={20} />
         </View>
       )}
-      <Text className={styles.name}>{props.name}</Text>
-      <View className={styles.more} onClick={handleEdit}>
-        <AtIcon prefixClass="icon" value="more" />
-      </View>
+      { icon !== null
+        && <View className={styles["template-icon"]}>
+          <AtIcon prefixClass="icon"
+            value={`ledger-${icon.icon}`}
+            color={icon.color}
+            size={48}
+          />
+        </View>
+      }
+      <Text className={styles.name}>{ledger.name}</Text>
+      { ledger.isPublic
+        && <View className={styles["share-tag"]}>共享</View>
+      }
+      { ledger.owner === userStore.username
+        && <View className={styles.more} onClick={handleEdit}>
+          <AtIcon prefixClass="icon" value="more" />
+        </View>
+      }
     </View>
   );
 };
@@ -51,8 +81,8 @@ const LedgerManagerPage = () => {
       if (response.data.code === 200) {
         overwrite(
           response.data.data.map((item) => ({
-            ...item,
-            isPublic: true,
+            ...omit(item, ["is_public"]),
+            isPublic: item.is_public || false
           }))
         );
       }
@@ -85,9 +115,8 @@ const LedgerManagerPage = () => {
         <View className={styles["ledgers-grid"]}>
           {ledgers.map((item) => (
             <LedgerCard
+              ledger={item}
               key={item.id}
-              name={item.name}
-              id={item.id}
               selected={ledgerID === item.id}
             />
           ))}

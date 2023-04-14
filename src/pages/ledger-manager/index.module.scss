@@ -16,11 +16,21 @@
     border-radius: 16rpx;
     transition: all 0.1s;
     position: relative;
+    gap: 12px;
+    overflow: hidden;
 
     .name {
       font-weight: 600;
-      margin: auto;
     }
+
+    .share-tag {
+      color: $color-brand;
+      font-size: .8em;
+      border: 2rpx solid $color-brand;
+      border-radius: 8rpx;
+      padding: 0 8rpx;
+    }
+
 
     .select {
       color: $color-gray-2;
@@ -43,6 +53,13 @@
         background-color: $color-gray-4;
       }
     }
+
+    .template-icon {
+      position: absolute;
+      opacity: .6;
+      left: 10%;
+    }
+
   }
   .add-btn {
     background-color: $color-white-1;
