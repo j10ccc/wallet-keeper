@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from "react";
 import { CellLabel } from "@/components/atoms";
 import LedgerService from "@/services/ledger";
 import styles from "./index.module.scss";
+import { omit } from "lodash-es";
+import { useUser } from "@/stores/useUser";
 
 const UpdateLedgerPage = () => {
   const { router } = getCurrentInstance();
@@ -27,9 +29,10 @@ const UpdateLedgerPage = () => {
   const [initialFormData, setInitialFormData] = useState<LedgerAPI.Ledger>(
     formDataRef.current
   );
+  const userStore = useUser();
 
   useEffect(() => {
-    const targetId = parseInt(router?.params.id || "-1") || null;
+    const targetId = parseInt(router?.params.id || "-1");
     const ledger = ledgers.find((item) => item.id === targetId);
 
     if (!ledger) {
@@ -80,10 +83,17 @@ const UpdateLedgerPage = () => {
   };
 
   const handleUpdatePublic = async (state: boolean) => {
+    if (!userStore.isLogin) {
+      Taro.showModal({
+        title: "提示",
+        content: "离线状态下无法开启账本共享"
+      });
+      return;
+    }
     formDataRef.current.isPublic = state;
     try {
       const res = await LedgerService.UpdateItemAPI({
-        ...formDataRef.current,
+        ...omit(formDataRef.current, ["isPublic"]),
         id: formDataRef.current.id,
         name: formDataRef.current.name,
         is_public: formDataRef.current.isPublic,
@@ -112,6 +122,13 @@ const UpdateLedgerPage = () => {
   };
 
   const handleUpdateName = async () => {
+    if (!userStore.isLogin) {
+      Taro.showModal({
+        title: "提示",
+        content: "离线状态下无法修改账本名"
+      });
+      return;
+    }
     try {
       const res = await LedgerService.UpdateItemAPI({
         id: formDataRef.current.id,
@@ -137,6 +154,14 @@ const UpdateLedgerPage = () => {
   };
 
   const handleDeleteLedger = () => {
+    if (!userStore.isLogin) {
+      Taro.showModal({
+        title: "提示",
+        content: "离线状态下无法删除账本"
+      });
+      return;
+    }
+
     Taro.showModal({
       title: "确认删除账本",
       content: "删除账本后，账本中的消费记录会丢失",
@@ -152,6 +177,7 @@ const UpdateLedgerPage = () => {
           } else {
             throw new Error(res.data.msg);
           }
+          // TODO: handle delete records
         } catch (e) {
           Taro.showToast({
             icon: "error",

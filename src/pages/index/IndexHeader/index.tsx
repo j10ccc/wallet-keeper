@@ -8,6 +8,9 @@ import dayjs from "dayjs";
 import { useBillRecords } from "@/stores/useBillRecords";
 import { useLedger } from "@/stores/useLedger";
 import Taro from "@tarojs/taro";
+import { useUser } from "@/stores/useUser";
+import ledger from "@/services/ledger";
+import { create } from "lodash-es";
 
 const TypeSelector = () => {
   const range = useRef({
@@ -63,18 +66,36 @@ const DateSelector = () => {
 };
 
 const LedgerSelector = () => {
-  const { ledgerID } = useQueryBills();
-  const { list: ledgers } = useLedger();
+  const { ledgerID, setLedgerID } = useQueryBills();
+  const { list: ledgers, create: createLedger } = useLedger();
+  const userStore = useUser();
 
-  const [ledgerName, setledgerName] = useState(() => {
+  useEffect(() => {
+    if (!userStore.isLogin) {
+      if (!ledgers.length) {
+        createLedger({
+          id: 0,
+          name: "默认账本",
+          template: "default",
+          owner: "荷包小二用户",
+          isPublic: false
+        });
+      }
+      setLedgerID(0);
+    } else {
+      setLedgerID(ledgers[0].id);
+    }
+  }, []);
+
+  const [ledgerName, setLedgerName] = useState(() => {
     // TODO: 默认账本
     if (ledgerID === undefined) return "点击获取账本";
     else return ledgers[0].name;
   });
 
   useEffect(() => {
-    if (ledgerID === undefined) return;
-    setledgerName(
+    // if (ledgerID === undefined) return;
+    setLedgerName(
       ledgers.find((item) => item.id === ledgerID)?.name || "未知账本"
     );
   }, [ledgers, ledgerID]);

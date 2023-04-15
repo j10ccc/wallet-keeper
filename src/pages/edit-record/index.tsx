@@ -185,7 +185,7 @@ const EditRecordPage = () => {
     // TODO: emit func to child component
     console.log("patch", newRecord);
     if (newRecord.value && newRecord.value != recordRef.current.value) {
-      amountViewerRef.current?.setAmount(newRecord.value.toFixed(3));
+      amountViewerRef.current?.setAmount(newRecord.value.toFixed(2));
       recordRef.current.value = newRecord.value;
     }
     if (newRecord.remark && newRecord.remark != recordRef.current.remark) {

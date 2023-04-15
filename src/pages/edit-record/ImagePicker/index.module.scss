@@ -25,26 +25,35 @@
       background-color: $color-gray-4;
       border-radius: 32rpx;
       transition: all .2s;
+      justify-content: center;
+      gap: 12rpx;
 
       &:active {
         background-color: $color-gray-3;
       }
 
+      .icon {
+        color: $color-text-3;
+      }
+
       .label {
         color: $color-text-3;
+        font-size: .9em;
       }
     }
   }
+
   .footer {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 48rpx;
+    box-sizing: border-box;
 
-    .back {
-      padding: 6rpx;
-      color: $color-text-2;
+    .icon {
+      color: $color-gray-3;
+      padding: 8rpx;
     }
-
   }
 
 }

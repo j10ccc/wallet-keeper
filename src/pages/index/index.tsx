@@ -47,7 +47,7 @@ const IndexPage = () => {
     setValidMap((state) => {
       // TODO: expand more filter deps
       const tmp = originList
-        .filter((item) => ledgerID && item.ledgerID === ledgerID)
+        .filter((item) => ledgerID !== undefined && item.ledgerID === ledgerID)
         .filter((item) => item.date.startsWith(`${date.year}-${date.month}-`));
 
       state = {};

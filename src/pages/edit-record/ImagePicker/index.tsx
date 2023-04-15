@@ -6,6 +6,7 @@ import styles from "./index.module.scss";
 import { useEditDraft } from "@/stores/useEditDraft";
 import { useContext } from "react";
 import EditContext from "../EditContext";
+import { AtIcon } from "taro-ui";
 
 const ImagePicker = () => {
   const { setInputMode } = useEditDraft();
@@ -41,14 +42,11 @@ const ImagePicker = () => {
     });
   };
 
-  const handleBack = () => {
-    setInputMode("keyboard");
-  };
-
   return <View className={styles.container}>
     <View className={styles.body}>
       <View className={styles.item} onClick={() => handleClick("default")}>
         <View className={styles.icon}>
+          <AtIcon prefixClass="icon" value="camera" size={28} />
         </View>
         <View className={styles.label}>
           <Text>普通票据</Text>
@@ -56,6 +54,7 @@ const ImagePicker = () => {
       </View>
       <View className={styles.item} onClick={() => handleClick("train")}>
         <View className={styles.icon}>
+          <AtIcon prefixClass="icon" value="train" size={28} />
         </View>
         <View className={styles.label}>
           <Text>火车票</Text>
@@ -63,8 +62,11 @@ const ImagePicker = () => {
       </View>
     </View>
     <View className={styles.footer}>
-      <View className={styles.back} onClick={handleBack}>
-        <Text>返回键盘输入</Text>
+      <View className={styles.icon} onClick={() => setInputMode("keyboard")}>
+        <AtIcon prefixClass="icon" value="keyboard" />
+      </View>
+      <View className={styles.icon} onClick={() => setInputMode("image")}>
+        <AtIcon prefixClass="icon" value="camera" />
       </View>
     </View>
   </View>;

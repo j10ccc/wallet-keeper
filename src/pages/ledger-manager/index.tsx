@@ -10,10 +10,12 @@ import styles from "./index.module.scss";
 import { omit } from "lodash-es";
 import LedgerSelector from "@/components/LedgerSelector";
 import { AtIcon } from "taro-ui";
+import { useUser } from "@/stores/useUser";
 
 const LedgerManagerPage = () => {
   const { ledgerID, setLedgerID } = useQueryBills();
   const { overwrite, list: ledgers } = useLedger();
+  const userStore = useUser();
 
   useRequest(LedgerService.FetchItemsAPI, {
     onSuccess: (response) => {
@@ -29,6 +31,22 @@ const LedgerManagerPage = () => {
   });
 
   const handleAdd = () => {
+    if (!userStore.isLogin) {
+      Taro.showModal({
+        title: "提示",
+        content: "使用多账本功能需要登陆小二账号",
+        confirmText: "去登陆",
+        cancelText: "离线使用",
+        success: () => {
+          Taro.switchTab({
+            url: "/pages/assets/index"
+          });
+        },
+        fail: () => { /** */ }
+      });
+      return;
+    }
+
     Taro.showActionSheet({
       itemList: ["创建账本", "加入他人账本"],
       success: (e) => {
