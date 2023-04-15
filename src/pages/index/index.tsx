@@ -1,5 +1,5 @@
 import IndexHeader from "./IndexHeader";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PageView from "@/components/PageView";
 import { useQueryBills } from "@/stores/useQueryBills";
 import { useBillRecords } from "@/stores/useBillRecords";
@@ -10,6 +10,9 @@ import WeeklyStatisticCard from "@/components/WeeklyStatisticCard";
 import styles from "./index.module.scss";
 import UserUtils from "@/utils/UserUtils";
 import { useUser } from "@/stores/useUser";
+import { ledgerTemplateList } from "@/constants/LedgerTemplateList";
+import { useLedger } from "@/stores/useLedger";
+import LedgerUtils from "@/utils/LedgerUtils";
 
 type ValidMapType = {
   // key: date string
@@ -18,9 +21,19 @@ type ValidMapType = {
 
 const IndexPage = () => {
   const { date, type, ledgerID } = useQueryBills();
+  const ledgers = useLedger(store => store.list);
   const { list: originList } = useBillRecords();
   const [validMap, setValidMap] = useState<ValidMapType>({});
   const { isLogin, setToken } = useUser();
+
+  console.log("index page render");
+
+  // refs
+  const currentLedger = useRef(LedgerUtils.getLedger(ledgerID, ledgers));
+  const currentTemplate = useRef(LedgerUtils.getTemplate(currentLedger.current));
+  const kindLabelMap = useRef(LedgerUtils.getTemplateKindLabelMap(
+    currentTemplate.current || ledgerTemplateList[0])
+  );
 
   useEffect(() => {
     if (isLogin) {
@@ -50,13 +63,26 @@ const IndexPage = () => {
     filterList();
   }, [date, originList, ledgerID]);
 
+  useEffect(() => {
+    /* change kindLabelMap */
+    currentLedger.current = LedgerUtils.getLedger(ledgerID, ledgers);
+    currentTemplate.current = LedgerUtils.getTemplate(currentLedger.current);
+    kindLabelMap.current = LedgerUtils.getTemplateKindLabelMap(currentTemplate.current);
+  }, [ledgerID]);
+
   return (
     <PageView isTabPage>
       <IndexHeader />
       <ScrollView className={styles["scroll-view"]} scrollY>
         <WeeklyStatisticCard />
         {Object.keys(validMap).map((item) => (
-          <TodayBill key={item} date={item} list={validMap[item]} type={type} />
+          <TodayBill
+            key={item}
+            date={item}
+            list={validMap[item]}
+            type={type}
+            kindLabelMap={kindLabelMap.current}
+          />
         ))}
       </ScrollView>
       <CreateRecordBubble />

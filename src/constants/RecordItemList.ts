@@ -1,9 +1,9 @@
-export type RecordTypeItem = {
+export type RecordKindType = {
   label: string;
   value: string; // consist with iconName
 }
 
-export const expenseItemList: RecordTypeItem[] = [
+export const expenseItemList: RecordKindType[] = [
   {label: "三餐", value: "meals"},
   {label: "日用品", value: "daily"},
   {label: "交通", value: "transit"},
@@ -24,7 +24,7 @@ export const expenseItemList: RecordTypeItem[] = [
   {label: "其他", value: "other"},
 ];
 
-export const incomeItemList: RecordTypeItem[] = [
+export const incomeItemList: RecordKindType[] = [
   {label: "工资", value: "salary"},
   {label: "生活费", value: "alimony"},
   {label: "收红包", value: "redenvelope"},

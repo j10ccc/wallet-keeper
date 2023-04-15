@@ -3,7 +3,6 @@ import { Text, View } from "@tarojs/components";
 import styles from "./index.module.scss";
 import { AtIcon } from "taro-ui";
 import classNames from "classnames";
-import { itemValueLabelMap } from "@/constants/RecordItemList";
 import { useEffect, useState } from "react";
 import Taro from "@tarojs/taro";
 import { useBillRecords } from "@/stores/useBillRecords";
@@ -13,10 +12,11 @@ type PropsType = {
   date: string;
   list: BillAPI.BillRecord[];
   type: string;
+  kindLabelMap: { [key: string]: string };
 };
 
 const TodayBill = (props: PropsType) => {
-  const { date, list, type } = props;
+  const { date, list, type, kindLabelMap } = props;
   const [_, month, day] = date.split("-").map((item) => parseInt(item));
   const [statistic, setStatistic] = useState({
     income: 0,
@@ -98,7 +98,7 @@ const TodayBill = (props: PropsType) => {
               </View>
               <View className={styles["detail-col"]}>
                 <Text className={styles.type}>
-                  {itemValueLabelMap[item.kind]}
+                  {kindLabelMap[item.kind]}
                 </Text>
                 <Text className={styles.desc}>{item.remark}</Text>
               </View>

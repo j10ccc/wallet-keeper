@@ -10,7 +10,7 @@ const AssetsPage = () => {
   return (
     <PageView isTabPage>
       <View className={styles.background} />
-      <ScrollView enableFlex className={styles["scroll-view"]}>
+      <ScrollView enableFlex scrollY className={styles["scroll-view"]}>
         <Nameplace />
         <AnalyseYearCard />
         <AnalyseMonthCard />

@@ -3,7 +3,6 @@ import { View } from "@tarojs/components";
 import type { CommonEvent } from "@tarojs/components";
 import type { InputEventDetail } from "taro-ui/types/input";
 import { useCallback, useRef } from "react";
-import type { MutableRefObject } from "react";
 import NumberKeyboard from "@/components/NumberKeyboard";
 import Taro, { useRouter } from "@tarojs/taro";
 import KindSelector from "@/components/KindSelector";
@@ -11,7 +10,6 @@ import type { KindSelectorRef } from "@/components/KindSelector";
 import MoreProperties, { MorePropertiesRef } from "./MoreProperties";
 import { useBillRecords } from "@/stores/useBillRecords";
 import { omit } from "lodash-es";
-import { expenseItemList } from "@/constants/RecordItemList";
 import { useGuid } from "@/hooks/useGuid";
 import { InsertItemAPI } from "@/services/bill/InsertItemAPI";
 import { UpdateItemAPI } from "@/services/bill/UpdateItemAPI";
@@ -21,6 +19,7 @@ import type { AmountViewerRef } from "./AmountViewer";
 import ImagePicker from "./ImagePicker";
 import EditContext from "./EditContext";
 import VoiceRecorder from "./VoiceRecorder";
+import LedgerUtils from "@/utils/LedgerUtils";
 
 const evalExpOfTwo = (content: string): number => {
   let res = 0;
@@ -49,7 +48,7 @@ const EditRecordPage = () => {
   const morePropertiesRef = useRef<MorePropertiesRef>(null);
 
   // TODO: loading cache
-  let defaultValue: BillAPI.DraftType | null;
+  let defaultValue: BillAPI.DraftType | null = null;
   const { mode, ledgerID } = useRouter().params;
   console.log("page render");
 
@@ -60,13 +59,15 @@ const EditRecordPage = () => {
         new Date().getMonth() + 1
       }-${new Date().getDate()}`,
       value: 0,
-      kind: expenseItemList[0].value,
+      kind: LedgerUtils.getTemplate(LedgerUtils.getLedger(
+        parseInt(ledgerID || "0") || ledgers[0].id, ledgers
+      )).expenseKinds[0].value,
       type: "expense",
       ledgerID: ledgerID ? parseInt(ledgerID) : ledgers[0]?.id,
       remark: undefined,
     };
 
-  const recordRef = useRef<BillAPI.DraftType>(defaultValue) as MutableRefObject<BillAPI.DraftType>;
+  const recordRef = useRef<BillAPI.DraftType>({ ...defaultValue });
 
   const { updateItem, addItem } = useBillRecords();
   const resetDraft = useEditDraft((state) => state.reset);
@@ -175,19 +176,13 @@ const EditRecordPage = () => {
     }
   };
 
-  const handleSelectKind = (e: { kind: string; type: "income" | "expense" }) => {
-    if (recordRef.current) {
-      recordRef.current.type = e.type;
-      recordRef.current.kind = e.kind;
-    }
-  };
-
   const handleInputRemark = useCallback((e: CommonEvent<InputEventDetail>) => {
     recordRef.current.remark = e.detail.value as string;
   }, []);
 
   /** 增量更新 patch，同时更新视图 */
   const updateEffect = (newRecord: Partial<BillAPI.DraftType>) => {
+    // TODO: emit func to child component
     console.log("patch", newRecord);
     if (newRecord.value && newRecord.value != recordRef.current.value) {
       amountViewerRef.current?.setAmount(newRecord.value.toFixed(3));
@@ -210,7 +205,10 @@ const EditRecordPage = () => {
       morePropertiesRef.current?.setDate(newRecord.date);
       recordRef.current.date = newRecord.date;
     }
-    // TODO:
+
+    if (newRecord.ledgerID && newRecord.ledgerID != recordRef.current.ledgerID) {
+      recordRef.current.ledgerID = newRecord.ledgerID;
+    }
   };
 
   return (
@@ -223,11 +221,7 @@ const EditRecordPage = () => {
       <View>
         <KindSelector
           ref={kindSelectorRef}
-          onSelect={handleSelectKind}
-          defaultValue={{
-            kind: recordRef.current?.kind,
-            type: recordRef.current?.type,
-          }}
+          defaultValue={defaultValue!}
         />
         <AmountViewer
           ref={amountViewerRef}
@@ -237,7 +231,8 @@ const EditRecordPage = () => {
         />
         <MoreProperties
           ref={morePropertiesRef}
-          record={recordRef} />
+          record={recordRef}
+        />
         {
           inputMode === "keyboard" &&
             <NumberKeyboard

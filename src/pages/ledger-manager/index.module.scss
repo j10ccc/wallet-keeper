@@ -1,70 +1,16 @@
 @import "@/styles/variables";
 
-.ledgers-grid {
-  display: grid;
-  // grid-template-columns: repeat(2, 50%);
-  padding: 16rpx;
-
-  .card {
-    margin: 16rpx;
-    background-color: $color-white-0;
-    padding: 12rpx;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 180rpx;
-    border-radius: 16rpx;
-    transition: all 0.1s;
-    position: relative;
-    gap: 12px;
-    overflow: hidden;
-
-    .name {
-      font-weight: 600;
-    }
-
-    .share-tag {
-      color: $color-brand;
-      font-size: .8em;
-      border: 2rpx solid $color-brand;
-      border-radius: 8rpx;
-      padding: 0 8rpx;
-    }
-
-
-    .select {
-      color: $color-gray-2;
-      position: absolute;
-      right: 32rpx;
-      bottom: 16rpx;
-      transition: all 0.2s;
-    }
-
-    .more {
-      color: $color-gray-2;
-      position: absolute;
-      right: 16rpx;
-      top: 16rpx;
-      transition: all 0.2s;
-      border-radius: 8rpx;
-      padding: 4rpx;
-
-      &:active {
-        background-color: $color-gray-4;
-      }
-    }
-
-    .template-icon {
-      position: absolute;
-      opacity: .6;
-      left: 10%;
-    }
-
-  }
-  .add-btn {
-    background-color: $color-white-1;
-    border: 6rpx dashed $color-gray-3;
-    color: $color-gray-1;
-    padding: 6rpx;
-  }
+.add-btn {
+  position: fixed;
+  right: 36rpx;
+  bottom: calc(36rpx + env(safe-area-inset-bottom));
+  padding: 24rpx;
+  border-radius: 100rpx;
+  background-color: $color-white-0;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  box-shadow: rgba(0, 0, 0, 0.16) 0rpx 10rpx 36rpx 0rpx, rgba(0, 0, 0, 0.06) 0rpx 0rpx 0rpx 1rpx;
+  font-weight: 600;
+  color: $color-green-7;
 }
