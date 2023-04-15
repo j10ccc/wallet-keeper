@@ -16,7 +16,7 @@ const DateExtension = forwardRef<DateExtensionRef, {
   const defaultDate = props.defaultValue;
   const [date, setDate] = useState("今天");
   const [showDateSelector, setShowDateSelector] = useState(false);
-  const { recordRef, updateEffect } = useContext(EditContext);
+  const { updateEffect } = useContext(EditContext);
 
   useImperativeHandle(ref, () => {
     return {

@@ -54,7 +54,7 @@ const LedgerCard = (props: {
       { ledger.isPublic
         && <View className={styles["share-tag"]}>共享</View>
       }
-      { ledger.owner === userStore.username || ledger.id === 0
+      { (ledger.owner === userStore.username || ledger.id === 0)
         && <View className={styles.more} onClick={handleEdit}>
           <AtIcon prefixClass="icon" value="more" />
         </View>
