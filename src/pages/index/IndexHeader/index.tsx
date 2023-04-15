@@ -9,8 +9,7 @@ import { useBillRecords } from "@/stores/useBillRecords";
 import { useLedger } from "@/stores/useLedger";
 import Taro from "@tarojs/taro";
 import { useUser } from "@/stores/useUser";
-import ledger from "@/services/ledger";
-import { create } from "lodash-es";
+import { getMergeData } from "@/utils/RecordUtils/sync";
 
 const TypeSelector = () => {
   const range = useRef({
@@ -39,13 +38,25 @@ const TypeSelector = () => {
 };
 
 const DateSelector = () => {
-  const { date, setDate } = useQueryBills();
+  const { date, setDate, ledgerID } = useQueryBills();
+  const recordStore = useBillRecords();
 
-  const handleSelect = (e: CommonEvent) => {
+  const handleSelect = async (e: CommonEvent) => {
     const [year, month] = e.detail.value
       .split("-")
       .map((item) => parseInt(item));
     setDate(year, month);
+    if (ledgerID) {
+      const res = await getMergeData(
+        e.detail.value,
+        "month",
+        ledgerID || 0,
+        recordStore.indexList,
+        recordStore.list
+      );
+      res.forEach(item => recordStore.addItem(item));
+    }
+
   };
 
   return (
@@ -88,15 +99,15 @@ const LedgerSelector = () => {
   }, []);
 
   const [ledgerName, setLedgerName] = useState(() => {
-    // TODO: 默认账本
     if (ledgerID === undefined) return "点击获取账本";
     else return ledgers[0].name;
   });
 
   useEffect(() => {
-    // if (ledgerID === undefined) return;
     setLedgerName(
-      ledgers.find((item) => item.id === ledgerID)?.name || "未知账本"
+      (ledgers.find((item) => item.id === ledgerID)
+        || ledgers[0]
+      )?.name || "未知账本"
     );
   }, [ledgers, ledgerID]);
 
@@ -165,6 +176,7 @@ const StatisticText = () => {
 };
 
 const IndexHeader = () => {
+
   return (
     <View className={styles.container}>
       <View className={styles["selectors"]}>

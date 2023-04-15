@@ -1,10 +1,10 @@
-import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 /**
   * Find available range of month in indexList.
   */
-const addressMonthIndex = (
+export const addressMonthIndex = (
   indexList: BillAPI.DateIndex[],
   startDate: Dayjs,
   endDate: Dayjs
@@ -20,7 +20,6 @@ const addressMonthIndex = (
   });
 
   if (startIndex !== -1) {
-    console.log(indexList.slice(startIndex));
     indexList.slice(0, startIndex + 1).find((item, index) => {
       if (!dayjs(item.date).isAfter(endDate, "month")) {
         endIndex = index;
@@ -54,7 +53,7 @@ const addressMonthIndex = (
   * and get the rough range record range,
   * then adjust to a exactly range.
   */
-const addressRecordIndex = (
+export const addressRecordIndex = (
   indexList: BillAPI.DateIndex[],
   records: BillAPI.BillRecord[],
   startDate: Dayjs,
@@ -86,9 +85,4 @@ const addressRecordIndex = (
     startIndex,
     endIndex
   };
-};
-
-export default {
-  addressMonthIndex,
-  addressRecordIndex,
 };

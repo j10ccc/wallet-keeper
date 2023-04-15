@@ -6,6 +6,14 @@ import useRequest from "@/hooks/useRequest";
 import { LoginByWXAPI } from "@/services/public/LoginAPI";
 import styles from "./index.module.scss";
 import classNames from "classnames";
+import { useLedger } from "@/stores/useLedger";
+import LedgerService from "@/services/ledger";
+import RecordService from "@/services/bill";
+import { omit } from "lodash-es";
+import { useBillRecords } from "@/stores/useBillRecords";
+import dayjs from "dayjs";
+import RecordUtils from "@/utils/RecordUtils";
+import { useQueryBills } from "@/stores/useQueryBills";
 
 const Nameplace = () => {
   const {
@@ -15,7 +23,10 @@ const Nameplace = () => {
     isLogin
   } = useUser();
 
-  const { setUser, setIsLogin} = useUser();
+  const { setUser, setIsLogin } = useUser();
+  const ledgerStore = useLedger();
+  const recordStore = useBillRecords();
+  const { setLedgerID } = useQueryBills();
 
   const { run } = useRequest(LoginByWXAPI, {
     manual: true,
@@ -29,6 +40,8 @@ const Nameplace = () => {
         });
         setIsLogin(true);
         Taro.showToast({title: "登录成功", icon: "success"});
+        syncWork();
+
       } else {
         Taro.showToast({
           title: `登录失败${res.data.msg || res.errMsg}`,
@@ -38,6 +51,87 @@ const Nameplace = () => {
     },
     onError: () => Taro.hideLoading()
   });
+
+
+  const syncWork = async () => {
+    const ledgers = await syncLedger();
+    setLedgerID(ledgers[0].id);
+    ledgers.length && syncOfflineLedger(ledgers);
+    ledgers.length && syncRecord(ledgers);
+    // sync record
+    // sync id = 0 ledger records to remote
+  };
+
+  const syncLedger = async () => {
+    Taro.showLoading({
+      title: "导入账本中"
+    });
+    let data: LedgerAPI.Ledger[] = [];
+
+    try {
+      const res = await LedgerService.FetchItemsAPI();
+      // TODO: sync id = 0 ledger
+      if (res.data.code === 200) {
+        data = res.data.data.map(item => ({
+          ...omit(item, "is_public"),
+          isPublic: item.is_public
+        }));
+        ledgerStore.overwrite(data);
+      } else {
+        throw new Error(res.data.msg);
+      }
+      Taro.hideLoading();
+    } catch (e) {
+      Taro.hideLoading();
+      Taro.showToast({
+        icon: "none",
+        title: e.message || "导入账本失败"
+      });
+    }
+    return data;
+  };
+
+  const syncOfflineLedger = async (ledgers: LedgerAPI.Ledger[]) => {
+    Taro.showLoading({
+      title: "同步记账历史"
+    });
+    const res = await Promise.allSettled(
+      recordStore.list.filter(item => item.ledgerID === 0).map(item => {
+        return new Promise((resolve, reject) => {
+          RecordService.InsertItemAPI({
+            ...item,
+            value: item.value.toFixed(2),
+            type: item.type === "expense" ? true : false,
+            ledger_id: ledgers[0].id,
+          })
+            .then(res => resolve(res.data.data))
+            .catch(() => reject(item));
+        });
+      })
+    );
+    // delete data before deleting offline ledger
+    recordStore.removeByLedger(0);
+    ledgerStore.delete(0);
+    // TODO: handle sync failed
+    console.log(res);
+    Taro.hideLoading();
+  };
+
+  const syncRecord = async (ledgers: LedgerAPI.Ledger[]) => {
+    const res = await RecordUtils.getMergeData(
+      dayjs().format("YYYY-MM"),
+      "month",
+      ledgers[0].id,
+      recordStore.indexList,
+      recordStore.list,
+    );
+
+    res.forEach(item => {
+      recordStore.addItem(item);
+    });
+
+    // console.log(res ,diffRes);
+  };
 
   const handleEnterProfile = () => {
     Taro.navigateTo({

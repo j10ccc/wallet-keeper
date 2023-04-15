@@ -226,7 +226,7 @@ const EditRecordPage = () => {
         <AmountViewer
           ref={amountViewerRef}
           defaultAmount={defaultValue?.value.toFixed(2)}
-          defaultRemark={defaultValue?.remark}
+          defaultRemark={defaultValue?.remark ? defaultValue.remark : undefined }
           onInputRemark={handleInputRemark}
         />
         <MoreProperties

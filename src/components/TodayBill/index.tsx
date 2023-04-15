@@ -1,12 +1,12 @@
 import { Text, View } from "@tarojs/components";
-
-import styles from "./index.module.scss";
 import { AtIcon } from "taro-ui";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import Taro from "@tarojs/taro";
 import { useBillRecords } from "@/stores/useBillRecords";
 import { useEditDraft } from "@/stores/useEditDraft";
+import RecordService from "@/services/bill";
+import styles from "./index.module.scss";
 
 type PropsType = {
   date: string;
@@ -39,6 +39,11 @@ const TodayBill = (props: PropsType) => {
           });
         } else if (e.tapIndex === 1) {
           deleteBill(item.uid);
+          if (item.id) {
+            RecordService.DeleteItemAPI({
+              id: item.id.toString()
+            });
+          }
         }
       },
     });
@@ -97,10 +102,15 @@ const TodayBill = (props: PropsType) => {
                 />
               </View>
               <View className={styles["detail-col"]}>
-                <Text className={styles.type}>
-                  {kindLabelMap[item.kind]}
-                </Text>
-                <Text className={styles.desc}>{item.remark}</Text>
+                <View className={styles.title}>
+                  <Text className={styles.type}>
+                    {kindLabelMap[item.kind]}
+                  </Text>
+                  {item.id === undefined ? (
+                    <Text className={styles.error}>未同步</Text>
+                  ) : null}
+                </View>
+                <Text className={styles.desc}>{item.uid}</Text>
               </View>
               <View className={styles["value-col"]}>
                 <Text className={classNames(styles["type"], styles[item.type])}>

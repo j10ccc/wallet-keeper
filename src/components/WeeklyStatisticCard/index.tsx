@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { Weekdays } from "@/constants/DateChars";
 import RecordUtils from "@/utils/RecordUtils";
 import DayUtils from "@/utils/DayUtils";
+import { useQueryBills } from "@/stores/useQueryBills";
 
 type ChartDataType = {
   value: number;
@@ -17,6 +18,7 @@ type ChartDataType = {
 
 const WeeklyStatisticCard = () => {
   const { list: records, indexList } = useBillRecords();
+  const { ledgerID } = useQueryBills();
   // TODO: trigger render by selected queryType
   // const queryType = useQueryBills((store) => store.type);
   const [queryType] = useState<"default" | "expense" | "income">("default");
@@ -43,14 +45,16 @@ const WeeklyStatisticCard = () => {
       value: 0,
     }));
 
-    records.slice(endIndex, startIndex + 1).forEach((item) => {
-      const weekdayIndex = dayjs(item.date).day() || 7;
-      if (item.type === "income")
-        incomeData.current[weekdayIndex - 1].value += item.value;
-      else expenseData.current[weekdayIndex - 1].value += item.value;
-    });
+    records.slice(endIndex, startIndex + 1)
+      .filter(item => item.ledgerID === ledgerID)
+      .forEach((item) => {
+        const weekdayIndex = dayjs(item.date).day() || 7;
+        if (item.type === "income")
+          incomeData.current[weekdayIndex - 1].value += item.value;
+        else expenseData.current[weekdayIndex - 1].value += item.value;
+      });
     setDataByQueryType();
-  }, [records]);
+  }, [records, ledgerID]);
 
   useEffect(() => {
     setDataByQueryType();

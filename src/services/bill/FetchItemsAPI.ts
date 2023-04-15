@@ -6,6 +6,12 @@ export const FetchItemsAPI = (data: BillAPI.FetchItems_Data) => {
   return request<BillAPI.FetchItems_Result>("/api/expenses", {
     method: "GET",
     header: { Cookie: token },
-    data,
+    data: {
+      ...data,
+      date: data.date === undefined? "" : data.date,
+      month: data.month === undefined? "" : data.month,
+      year: data.year === undefined? "" : data.year,
+      type: data.type ? data.type : ""
+    }
   });
 };

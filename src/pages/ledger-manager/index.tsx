@@ -11,11 +11,14 @@ import { omit } from "lodash-es";
 import LedgerSelector from "@/components/LedgerSelector";
 import { AtIcon } from "taro-ui";
 import { useUser } from "@/stores/useUser";
+import RecordUtils from "@/utils/RecordUtils";
+import { useBillRecords } from "@/stores/useBillRecords";
 
 const LedgerManagerPage = () => {
-  const { ledgerID, setLedgerID } = useQueryBills();
+  const { ledgerID, setLedgerID, date } = useQueryBills();
   const { overwrite, list: ledgers } = useLedger();
   const userStore = useUser();
+  const recordStore = useBillRecords();
 
   useRequest(LedgerService.FetchItemsAPI, {
     onSuccess: (response) => {
@@ -66,8 +69,19 @@ const LedgerManagerPage = () => {
     });
   };
 
-  const handleLedgerSelect = (ledger: LedgerAPI.Ledger) => {
+  const handleLedgerSelect = async (ledger: LedgerAPI.Ledger) => {
+
+    const res = await RecordUtils.getMergeData(
+      `${date.year}-${date.month}`,
+      "month",
+      ledger.id,
+      recordStore.indexList,
+      recordStore.list
+    );
+    res.forEach(item => recordStore.addItem(item));
+
     setLedgerID(ledger.id);
+
     Taro.navigateBack();
   };
 

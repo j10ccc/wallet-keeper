@@ -9,6 +9,7 @@ type BillRecordsState = {
   indexList: Array<BillAPI.DateIndex>;
   addItem: (item: BillAPI.BillRecord) => void;
   removeItem: (uid: string) => boolean;
+  removeByLedger: (ledgerId: number) => void;
   updateItem: (uid: string, value: Omit<BillAPI.BillRecord, "uid">) => void;
   updateIndex: (records: Array<BillAPI.BillRecord>, type?: "add" | "delete") => void;
 }
@@ -54,12 +55,24 @@ export const useBillRecords = create<
       });
       return isFound;
     },
+    removeByLedger: (ledgerId) => {
+      set(state => {
+        const toDelete: BillAPI.BillRecord[] = [];
+        const res = state.list.filter(item => {
+          if (item.ledgerID !== ledgerId) return true;
+          else toDelete.push(item);
+        });
+        state.updateIndex(toDelete, "delete");
+        return {
+          list: res
+        };
+      });
+    },
     updateItem: (uid: string, item) => {
       get().removeItem(uid);
       get().addItem({ uid, ...item });
     },
     updateIndex: (records, type = "add") => {
-
       // 计算出日期集合
       /** e.g. { "2021-03-24": 5 } */
       const dateLengthMap = {};
@@ -121,4 +134,3 @@ export const useBillRecords = create<
     storage: createJSONStorage(() => storage)
   })
 );
-

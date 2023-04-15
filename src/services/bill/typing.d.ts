@@ -7,7 +7,7 @@ declare namespace BillAPI {
     value: number; // 13.89
     kind: string; // meals
     ledgerID: number;
-    remark?: string;
+    remark?: string | null;
   }
 
   interface DraftType extends Omit<BillRecord, "uid"> {
@@ -67,12 +67,15 @@ declare namespace BillAPI {
     type?: 0 | 1;
     page_num: number;
     page_size: number;
+    ledger_id: number;
   }
 
-  interface FetchItems_Result
-    extends Common.IResponse<{
-      // TODO:
-    }> {}
+  interface FetchItems_Result extends Common.IResponse<{
+    pageNumber: number;
+    pageSize: number;
+    result: Array<Omit<BillRecord, "type"> & { type: boolean }>;
+    total: number;
+  }> {}
 
   interface UploadVoiceWords_Data {
     sentence: string;
