@@ -7,6 +7,9 @@ import { useBillRecords } from "@/stores/useBillRecords";
 import { useEditDraft } from "@/stores/useEditDraft";
 import RecordService from "@/services/bill";
 import styles from "./index.module.scss";
+import LedgerUtils from "@/utils/LedgerUtils";
+import { useLedger } from "@/stores/useLedger";
+import { useUser } from "@/stores/useUser";
 
 type PropsType = {
   date: string;
@@ -22,6 +25,8 @@ const TodayBill = (props: PropsType) => {
     income: 0,
     expense: 0,
   });
+  const ledgerStore = useLedger();
+  const userStore = useUser();
 
   const deleteBill = useBillRecords((state) => state.removeItem);
   const setEditDraft = useEditDraft((state) => state.setDraft);
@@ -29,6 +34,8 @@ const TodayBill = (props: PropsType) => {
   const [validList, setValidList] = useState<BillAPI.BillRecord[]>([]);
 
   const handleLongPress = (item: BillAPI.BillRecord) => {
+    const ledger = LedgerUtils.getLedger(item.ledgerID, ledgerStore.list);
+
     Taro.showActionSheet({
       itemList: ["编辑", "删除"],
       success: (e) => {
@@ -38,6 +45,13 @@ const TodayBill = (props: PropsType) => {
             url: "/pages/edit-record/index?mode=update",
           });
         } else if (e.tapIndex === 1) {
+          if (ledger?.owner !== userStore.username) {
+            Taro.showToast({
+              icon: "none",
+              title: "非账本创建者无法删除记账"
+            });
+            return;
+          }
           deleteBill(item.uid);
           if (item.id) {
             RecordService.DeleteItemAPI({
