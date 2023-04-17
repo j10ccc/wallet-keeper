@@ -29,8 +29,9 @@ declare namespace BillAPI {
 
   interface UploadPhoto_Result
     extends Common.IResponse<
-      Partial<Omit<DraftType, "value">> & {
+      Partial<Omit<DraftType, "value" | "type">> & {
         value: string;
+        type: true;
       }
     > {}
 

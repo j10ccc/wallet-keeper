@@ -92,7 +92,7 @@ const VoiceRecorder = () => {
   const handleRecordStart = useCallback(() => {
     timer.current = setTimeout(() => {
       isRecordLongEnough.current = true;
-    }, 3000);
+    }, 1000);
     recordRecoManager.current!.start(recorderOptions.current);
   }, []);
 

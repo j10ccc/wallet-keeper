@@ -117,7 +117,7 @@ const CreateLedgerPage = () => {
         />
       </AtForm>
       <View>
-        <Text className={styles.title}>推荐模板</Text>
+        <Text className={styles.title}>记账场景</Text>
         <TemplateGrid onSelect={handleTemplateSelect}/>
       </View>
       <View className={styles.actions}>

@@ -30,6 +30,8 @@ const ImagePicker = () => {
           if (tmp.code === 200) {
             updateEffect({
               ...tmp.data,
+              kind: type ==="train" ? "transit" : tmp.data.kind,
+              type: tmp.data.type ? "expense": "income",
               value: parseFloat(tmp.data.value)
             });
           }

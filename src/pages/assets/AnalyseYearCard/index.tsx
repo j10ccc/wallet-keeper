@@ -41,9 +41,13 @@ const AnalyseYearCard = () => {
   const [monthLabels, setMonthLabels] = useState<MonthLabelType[]>([]);
 
   useEffect(() => {
-    if (!indexList?.length) return;
+    /** 热力图每个点的数据 */
+    const dataTmp: typeof data = new Array(
+      chartSize.current.height * chartSize.current.width
+    ).fill(0).map(() => ({ value: 0 }));
 
-    const { startIndex: recordStartIndex, endIndex: recordEndIndex  } =
+    if (indexList?.length) {
+      const { startIndex: recordStartIndex, endIndex: recordEndIndex  } =
       RecordUtils.addressRecordIndex(
         indexList,
         records,
@@ -51,16 +55,13 @@ const AnalyseYearCard = () => {
         endDate.current
       );
 
-    /** 热力图每个点的数据 */
-    const dataTmp: typeof data = new Array(
-      chartSize.current.height * chartSize.current.width
-    ).fill(0).map(() => ({ value: 0 }));
+      records.slice(recordEndIndex, recordStartIndex + 1).forEach((item) => {
+        const diff = endDate.current.diff(dayjs(item.date), "day");
+        dataTmp[chartSize.current.height * chartSize.current.width - 1 - diff]
+          .value++;
+      });
+    }
 
-    records.slice(recordEndIndex, recordStartIndex + 1).forEach((item) => {
-      const diff = endDate.current.diff(dayjs(item.date), "day");
-      dataTmp[chartSize.current.height * chartSize.current.width - 1 - diff]
-        .value++;
-    });
     setData(dataTmp);
   }, [records]);
 
