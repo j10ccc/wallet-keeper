@@ -23,7 +23,7 @@ type ValidMapType = {
 
 const IndexPage = () => {
   const ledgers = useLedger(store => store.list);
-  const { date, type, ledgerID = ledgers[0]?.id || 0, setLedgerID } = useQueryBills();
+  const { date, type, ledgerID = ledgers[0]?.id || 0 } = useQueryBills();
   const { list: originList } = useBillRecords();
   const [validMap, setValidMap] = useState<ValidMapType>({});
   const { isLogin, setToken } = useUser();

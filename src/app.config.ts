@@ -13,6 +13,7 @@ export default defineAppConfig({
     "pages/ledger-manager/update/index",
     "pages/ledger-manager/join/index",
     "pages/clockin/index",
+    "pages/award-exchange/index",
   ],
   tabBar: {
     custom: true,

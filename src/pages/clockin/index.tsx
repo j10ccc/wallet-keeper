@@ -12,6 +12,8 @@ import { useClockIn } from "@/stores/useClockIn";
 import { useEffect, useRef, useState } from "react";
 import mock from "@/mock/index";
 import classNames from "classnames";
+import { useCurrecy } from "@/stores/useCurrency";
+import ClockInMock from "@/mock/ClockInMock";
 
 const countConstantDates = (dates: string[]) => {
   let tmp: string | undefined = undefined;
@@ -29,6 +31,7 @@ const countConstantDates = (dates: string[]) => {
 };
 
 const checkClockin = (dates: string[], day: Dayjs = dayjs()) => {
+  console.log(dates);
   if (dayjs(dates[dates.length - 1]).isSame(day, "day")) {
     return true;
   } else {
@@ -44,6 +47,7 @@ const ClockinPage = () => {
   const [countOfConstantDates, setCountOfConstantDates] = useState(
     countConstantDates(dates)
   );
+  const currencyStore = useCurrecy();
 
   useEffect(() => {
     if (dates?.length) return;
@@ -75,13 +79,20 @@ const ClockinPage = () => {
 
   const handleClickExchange = () => {
     Taro.navigateTo({
-      url: "/pages/grocery/index"
+      url: "/pages/award-exchange/index"
     });
   };
 
   const handleClickClockIn = () => {
     if (isTodayClockIn.current) return;
     clockIn(dayjs().format("YYYY-MM-DD"));
+    const plusValue = ClockInMock.plusValue;
+    currencyStore.plus(plusValue);
+    Taro.showToast({
+      icon: "none",
+      title: `签到成功，碎银 +${plusValue}`
+    });
+
   };
 
   return (
@@ -96,7 +107,7 @@ const ClockinPage = () => {
             </View>
             <View className={styles.item}>
               <Text className={styles.text}>当前{ CurrencyName }数</Text>
-              <Text className={styles.content}>123133</Text>
+              <Text className={styles.content}>{currencyStore.value}</Text>
             </View>
           </View>
           <View className={styles.bottom}>
